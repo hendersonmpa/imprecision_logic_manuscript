@@ -1,0 +1,184 @@
+% Created 2022-04-14 Thu 17:25
+% Intended LaTeX compiler: pdflatex
+\documentclass[review]{elsarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{lineno}
+\linenumbers
+\usepackage{setspace}
+\onehalfspacing
+\authblk
+\usepackage{pdfpages}
+\usepackage{textpos}
+\usepackage[final]{draftwatermark}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{chemfig}
+\setchemfig{atom style={scale=0.45}}
+\usepackage[]{mhchem}
+\date{}
+\title{}
+\hypersetup{
+ pdfauthor={Matthew Henderson},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.2 (Org mode 9.5)}, 
+ pdflang={English}}
+\usepackage[notquote]{hanging}
+\begin{document}\makeatletter
+\newcommand{\citeprocitem}[2]{\hyper@linkstart{cite}{citeproc_bib_item_#1}#2\hyper@linkend}
+\makeatother
+
+
+
+\begin{frontmatter}
+\title{Imprecision Logic}
+\author[NSO, UoO]{Matthew P.A. Henderson\corref{cor1}}
+\ead{mhenderson@cheo.on.ca}
+\author[NSO]{Michael Kowalski}
+\author[NSO, UO]{Pranesh Chakraborty}
+\address[NSO]{Newborn Screening Ontario, Children's Hospital of Eastern Ontario,Canada}
+\address[UoO]{Department of Medicine, University of Ottawa,Canada} 
+\cortext[cor1]{Corresponding author}
+\end{frontmatter}
+
+\section*{Notes}
+\label{sec:orga9f55b9}
+\subsection*{Focused Report}
+\label{sec:org1092d71}
+\begin{itemize}
+\item The Focused Report category is intended for concise method
+evaluation contributions and succinct clinical manuscripts. All
+Focused Reports will undergo peer review.
+\item Submissions in this category should contain four sections:
+\begin{itemize}
+\item Abstract (structured, no more than 250 words)
+\item Introduction
+\item Methods
+\item Results
+\item Discussion
+\item An Impact Statement should appear after the abstract.
+\end{itemize}
+\item They should be no more than 1,500 words in length with a maximum of
+20 references and a total of no more than two tables and
+figures. Figures and tables should not be multipart (i.e., Fig. 1A,
+1B, 1C, Part 1, Part 2). No more than 5 authors should be
+listed. Supplemental data are permitted for Focused Reports.
+\end{itemize}
+
+In some instances, editors may request that a submission of another article type to JALM be decreased to meet the requirements of a Focused Report.
+
+\section*{{\bfseries\sffamily TODO} Abstract (250 words)}
+\label{sec:org5d769c1}
+\begin{description}
+\item[{Introduction}] 
+
+\item[{Methods}] 
+
+\item[{Results}] 
+
+\item[{Conclusion}] 
+\end{description}
+\section*{{\bfseries\sffamily TODO} Keywords}
+\label{sec:org5bd1fea}
+\section*{{\bfseries\sffamily TODO} Introduction}
+\label{sec:orgd002189}
+\begin{itemize}
+\item The probability that a laboratory will incorrectly assign a
+screen-positive or negative result owing to measurement error can be
+estimated from the area under the standardized normal distribution.
+
+\item The uncertainty of measurement approach uses an expansion factor
+of 2. This would result an \(\sim\) 2\% probability of a false negative
+result (Table \ref{tab:org3724d1a}).
+\item The tolerance for a false negative first tier screening result at
+NSO is very low, therefore, the most appropriate expansion factor
+should be applied.
+
+\item Analytical drift due to factors such as calibrations and weather can
+result in periodic bias
+\item This should also be considered in determining impression logic
+\end{itemize}
+
+\begin{table}[htbp]
+\caption[sigma]{\label{tab:org3724d1a}Probability of a false negative screen due to imprecision}
+\centering
+\begin{tabular}{rrl}
+SD & probability of false negative & count\\
+\hline
+1 & 0.1586553\\
+2 & 0.02275013\\
+3 & 0.001349898\\
+4 & 3.167124ee-05\\
+5 & 2.866516ee-07\\
+6 & 9.865876ee-10\\
+\end{tabular}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption[sigma]{\label{tab:orgea62171}Precison near screening thresholds}
+\centering
+\begin{tabular}{lrlrr}
+Analyte & Threshold & QC & mean & sd\\
+\hline
+GALT & 1.5 & G17069 & 1.6 & 0.2\\
+BIOT & 27 & B170621 & 33 & 3.7\\
+TSH & 15 & 659845-1 & 15 & 1.3\\
+\end{tabular}
+\end{table}
+
+
+\section*{{\bfseries\sffamily TODO} Material and Methods}
+\label{sec:orgb6b5763}
+\section*{Results}
+\label{sec:org1eb909c}
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Thu, Apr 14, 2022 - 05:25:52 PM
+\begin{table}[!htbp] \centering 
+  \caption{Uncertainty of Measurement Based Initial Screening Thresholds with Predicted Repeat Samples Population Data} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & factor & confirm & initial & grey\_samples \\ 
+\hline \\[-1.8ex] 
+1 & $2$ & $1.523$ & $1.888$ & $24.650$ \\ 
+2 & $3$ & $1.523$ & $2.091$ & $52.200$ \\ 
+3 & $4$ & $1.523$ & $2.294$ & $94.250$ \\ 
+4 & $5$ & $1.523$ & $2.496$ & $156.600$ \\ 
+5 & $6$ & $1.523$ & $2.699$ & $234.900$ \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{./figures/galtthresholds.pdf}
+\end{center}
+
+\section*{{\bfseries\sffamily TODO} Discussion}
+\label{sec:org60deb34}
+\section*{{\bfseries\sffamily TODO} Conclusions}
+\label{sec:org2571a69}
+
+\section*{Acknowledgments}
+\label{sec:org2e4df9b}
+Funding: None.
+\section*{References}
+\label{sec:org4e6be2f}
+\begin{hangparas}{1.5em}{1}
+
+\end{hangparas}
+\end{document}
