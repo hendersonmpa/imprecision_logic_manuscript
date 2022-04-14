@@ -1,0 +1,422 @@
+:PROPERTIES:
+- org-mode configuration
+#+Latex_class: els-article
+#+LANGUAGE:  en
+#+OPTIONS:   title:nil author:nil date:nil  H:2 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:
+#+LINK_HOME:
+#+XSLT:
+#+DRAWERS: LOGBOOK CLOCK HIDDEN PROPERTIES
+#+STARTUP: overview
+#+STARTUP: noindent
+#+bibliography: Collection.bib
+#+cite_export: csl 
+#+LaTeX_HEADER: \usepackage{lineno}
+#+LaTeX_HEADER: \linenumbers
+#+LaTeX_HEADER: \usepackage{setspace}
+#+LaTeX_HEADER: \onehalfspacing
+#+LaTeX_HEADER: \authblk
+#+LaTeX_HEADER: \usepackage{pdfpages}
+#+LaTeX_header: \usepackage{textpos}
+#+LaTeX_header: \usepackage[final]{draftwatermark}
+#+LaTeX_HEADER: \usepackage{gensymb}
+#+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{chemfig}
+#+LaTeX_HEADER: \setchemfig{atom style={scale=0.45}}
+#+LaTeX_HEADER: \usepackage[]{mhchem}
+:END:
+
+#+BEGIN_EXPORT LaTeX
+\begin{frontmatter}
+\title{Imprecision Logic.}
+\author[NSO, UoO]{Matthew P.A. Henderson\corref{cor1}}
+\ead{mhenderson@cheo.on.ca}
+\author[NSO]{Michael Kowalski}
+\author[NSO, UO]{Pranesh Chakraborty}
+\address[NSO]{Newborn Screening Ontario, Children's Hospital of Eastern Ontario}
+\address[UoO]{Department of Medicine, University of Ottawa} 
+\cortext[cor1]{Corresponding author}
+\end{frontmatter}
+#+END_EXPORT
+
+* TODO Abstract
+* TODO Keywords
+* TODO Introduction
+* TODO Material and Methods
+* TODO Results
+** Rationale
+
+#+begin_src R :session *R* :results values :exports results :tangle yes
+  library("tidyverse")
+  library("lubridate")
+  library("magrittr")
+  library("readxl")
+  library("mcr")
+  library("xts")
+  library("TTR")
+  library("RODBC")
+  library("xtable")
+  library("TSA")
+  library("forecast")
+  library("equate")
+  library("moments")
+  library(RColorBrewer)
+  ## options(tibble.width = Inf)
+  ##  options(tibble.print_max = Inf) 
+  options(warn=-1) ## options(warn=0) to turn back on
+  ## Suppress summarise info
+  options(dplyr.summarise.inform = FALSE)
+  ## options(tibble.width = Inf)
+  ## options(tibble.print_max = Inf) 
+  today <- as.Date(now())
+  source("credentials.r")
+
+  ## rescale a vector from 0 to 1
+  rescale <- function(x){
+    (x-min(x))/(max(x)-min(x))
+  }
+
+  '%!in%' <- function(x,y)!('%in%'(x,y))
+
+  densarea <- function(dens, lower, upper) {
+    xx <- dens$x
+    yy <- dens$y
+    dx <- xx[2L] - xx[1L]
+    C <- sum(yy) * dx ## total area should be 1
+    p.unscaled <- sum(yy[xx >= lower & xx <= upper]) * dx
+    round(p.unscaled/C, digits = 5) ## scaled probablity
+  }
+
+  resultdens <- function(data,analyte,threshold, borderline, xlimit = FALSE){
+
+    dens <- density(data)
+    lower <- min(which(dens$x >= min(c(borderline, threshold)))) 
+    upper <- max(which(dens$x <= max(c(borderline, threshold))))
+    quantiles <- quantile(data, c(0.025, 0.975))
+    upperlimit <- ifelse(xlimit, xlimit, max(data))  ## xlimit truncates the data set for plotting
+    area <- ifelse(borderline > threshold,
+		   densarea(dens, threshold, borderline),
+		   densarea(dens, borderline, threshold))
+    plot(dens, xlim = c(0,upperlimit), main = paste(analyte, "density plot"))
+    with(dens, polygon(x=c(x[c(lower,lower:upper,upper)]), y= c(0, y[lower:upper], 0), col="gray"))
+    abline(v = threshold, col = "red" )
+    abline(v = borderline, col = "blue" )
+    abline(v = quantiles[1], col = "black", lty = "dashed")
+    abline(v = quantiles[2], col = "black", lty = "dashed")
+    mtext(text= paste("Annual results in grey area:", round(area*145000, digits = 0)), side = 3)
+    legend("topright",legend = c("threshold", "borderline", "95%tile RI"),
+	   col = c("red", "blue", "black") ,
+	   lty = c("solid","solid", "dashed"))
+  }
+
+
+  zoomdens <- function(data,analyte,threshold, borderline, umsd, xlimit = FALSE){
+    dens <- density(data)
+    lower <- min(which(dens$x >= min(c(borderline, threshold)))) 
+    upper <- max(which(dens$x <= max(c(borderline, threshold))))
+    theight  <- min(dens$y[which(dens$x >= threshold)])
+    print(theight)
+    bheight  <- max(dens$y[which(dens$x <= borderline)])
+    print(bheight)
+    quantiles <- quantile(data, c(0.025, 0.975))
+
+    upperlimit <- ifelse(xlimit, xlimit, max(data))  ## xlimit truncates the data set for plotting
+    ## area <- ifelse(borderline > threshold,
+    ##       	 densarea(dens, threshold, borderline),
+    ##       	 densarea(dens, borderline, threshold))
+    x2 <- seq(threshold:2*borderline,0.01)
+    y2 <- theight*rescale(dnorm(x2,threshold,umsd))
+    plot(x = .5*lower:2*upper, y = 0:2*bheight, main = paste(analyte, "density plot"), type = "n")
+					  #	  with(dens, polygon(x=c(x[c(lower,lower:upper,upper)]), y= c(0, y[lower:upper], 0), col="gray"))
+    segments(x0=threshold, y0=0,x1 = threshold, y1=theight,col="red", lty = 2 )
+    segments(x0=borderline, y0=0,x1 = borderline, y1=bheight,col="blue", lty = 2 )
+    ## points(x2,y2,type="l",col="blue")
+    ## polygon(c(halfx2,rev(halfx2)),c(halfy2,zeros),col="skyblue")
+
+    ## mtext(text= paste("Probablity in grey zone:",area), side = 3)
+    ## legend("topright",legend = c("threshold", "borderline", "95%tile RI"),
+    ##        col = c("red", "blue", "black") ,
+    ##        lty = c("solid","solid", "dashed"))
+  }
+
+
+  denssamples <- function(data, threshold, sd, sds, direction = "left", samples = 145000) {
+    dens <- density(data)
+    if (direction == "left") {
+      lower <- dens$x[min(which(dens$x >= threshold))]
+      temp <- threshold + (sds * sd) 
+      upper <- dens$x[max(which(dens$x <= temp))]
+      six <- dens$x[max(which(dens$x <= (threshold + (6 * sd))))]
+      totalarea <- densarea(dens, lower, six)
+    } else {
+      ## right sided threshold
+      upper <- dens$x[max(which(dens$x <= threshold))]
+      temp <- threshold - (sds * sd)
+      lower <- dens$x[min(which(dens$x >= temp))]
+      six <- dens$x[min(which(dens$x >= (threshold - (6 * sd))))]
+      totalarea <- densarea(dens, six, upper)
+    }
+    area <- densarea(dens, lower, upper)
+    confirmed <- area * samples
+    missed <- (totalarea * samples) - confirmed
+    sprintf("factor: %d, lower: %.2f, upper: %.2f, area: %.4f, confirmed: %.0f, missed: %.0f", i,lower, upper, area, confirmed, missed )
+  }
+
+					  #   denssamples(galtfilter$result, 1.5, 0.2, 5, direction = "left")
+#+end_src
+
+#+RESULTS:
+
+*** Screening and Analytical Imprecision
+- The probability that a laboratory will incorrectly assign a
+  screen-positive or negative result owing to measurement error can be
+  estimated from the area under the standardized normal distribution
+  (Figure [[fig:sigma]])
+- The uncertainty of measurement approach uses an expansion factor
+  of 2. This would result an \sim 2% probability of a false negative
+  result (Table [[tab:sigma]]).
+- The tolerance for a false negative first tier screening result at
+  NSO is very low, therefore, the most appropriate expansion factor
+  should be applied.
+
+
+#+begin_src R :session *R* :results graphics :file ./figures/sigma.pdf :exports results :tangle yes
+
+  cols <- rev(brewer.pal(6, "Blues"))
+  ##cols <- c("#2171B5", "#6BAED6", "#BDD7E7", "#EFF3FF")
+  ## Sequence between -6 and 6 with 0.1 steps
+  x <- seq(-6, 6, 0.1)
+  ## Plot an empty chart with tight axis boundaries, and axis lines on bottom and left
+  plot(x, type="n", xaxs="i", yaxs="i", xlim=c(-6, 6), ylim=c(0, 0.4),
+       bty="l", xaxt="n", xlab="x-value", ylab="probability density")
+					  # Function to plot each coloured portion of the curve, between "a" and "b" as a
+					  # polygon; the function "dnorm" is the normal probability density function
+  polysection <- function(a, b, col, n=11){
+    dx <- seq(a, b, length.out=n)
+    polygon(c(a, dx, b), c(0, dnorm(dx), 0), col=col, border=NA)
+					  # draw a white vertical line on "inside" side to separate each section
+    segments(a, 0, a, dnorm(a), col="white")
+  }
+					  # Build the four left and right portions of this bell curve
+  for(i in 0:5){
+    polysection(   i, i+1,  col=cols[i+1]) # Right side of 0
+    polysection(-i-1,  -i,  col=cols[i+1]) # Left right of 0
+  }
+					  # Black outline of bell curve
+  lines(x, dnorm(x))
+
+					  # Bottom axis values, where sigma represents standard deviation and mu is the mean
+  axis(1, at=-6:6, labels=expression(-6*sigma, -5*sigma,-4*sigma, -3*sigma,
+				     -2*sigma, -1*sigma, mu, 1*sigma,  2*sigma, 3*sigma, 4*sigma,
+				     5*sigma, 6*sigma))
+					  # Add percent densities to each division, between x and x+1
+  pd <- sprintf("%.1f%%", 100*(pnorm(1:4) - pnorm(0:3)))
+  text(c((0:3)+0.5,(0:-3)-0.5), c(0.16, 0.05, 0.04, 0.02), pd, col=c("white","white","black","black"))
+  segments(c(-2.5, -3.5, 2.5, 3.5), dnorm(c(2.5, 3.5)), c(-2.5, -3.5, 2.5, 3.5), c(0.03, 0.01))
+#+end_src
+
+
+#+CAPTION[normal distribution]: Normal distribution with probability
+#+NAME: fig:sigma 
+#+ATTR_LaTeX: :width 0.8\textwidth
+#+RESULTS:
+
+
+#+RESULTS:
+
+#+CAPTION[sigma]: Probability of a false negative screen due to imprecision
+#+NAME: tab:sigma
+| SD | probability of false negative | 
+|----+-------------------------------+
+|  1 |                     0.1586553 |
+|  2 |                    0.02275013 |
+|  3 |                   0.001349898 |
+|  4 |                 3.167124ee-05 |
+|  5 |                 2.866516ee-07 |
+|  6 |                 9.865876ee-10 |
+
+
+#+CAPTION[sigma]: Precison near screening thresholds
+#+NAME: tab:precision
+#+TBLNAME: datatable
+| Analyte | Threshold | QC       | mean |  sd |
+|---------+-----------+----------+------+-----|
+| GALT    |       1.5 | G17069   |  1.6 | 0.2 |
+| BIOT    |        27 | B170621  |   33 | 3.7 |
+| TSH     |        15 | 659845-1 |   15 | 1.3 |
+
+
+#+begin_src R :session *R* :var data=datatable :results values :exports none :tangle yes
+  data$five_sd <- 5 * data$sd
+
+  borderline_threshold <- function(row){
+      analyte <- row[1]
+      threshold <- row[2]
+      f_sd <- row[6]
+      if (analyte == "TSH") {
+	  threshold - f_sd
+      } else {
+	  threshold + f_sd}
+  }
+
+  for (row in 1:nrow(data)) {
+      data$borderline[row] <- borderline_threshold(data[row,])
+      }
+
+#+end_src
+
+#+RESULTS:
+
+**** COMMENT
+
+#+begin_src R :session *R* :results output latex :exports results :tangle yes
+  data %>%
+      xtable(caption = "Proposed first tier thresholds", label = "tab:first") %>%
+      print(include.rownames = FALSE)
+#+end_src
+
+#+RESULTS:
+#+begin_export latex
+% latex table generated in R 4.0.3 by xtable 1.8-4 package
+% Thu Apr  7 11:49:12 2022
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrlrrrr}
+  \hline
+Analyte & Threshold & QC & mean & sd & five\_sd & borderline \\ 
+  \hline
+GALT & 1.50 & G17069 & 1.60 & 0.20 & 1.00 & 2.50 \\ 
+  BIOT & 27.00 & B170621 & 33.00 & 3.70 & 18.50 & 45.50 \\ 
+  TSH & 15.00 & 659845-1 & 15.00 & 1.30 & 6.50 & 8.50 \\ 
+   \hline
+\end{tabular}
+\caption{Proposed first tier thresholds} 
+\label{tab:first}
+\end{table}
+#+end_export
+
+
+*** Screening and Analytical Bias
+- Analytical drift due to factors such as calibrations and weather can
+  result in periodic bias
+- This should also be considered in determining impression logic
+
+\clearpage
+
+
+** Analysis 
+#+begin_src R :session *R* :results values :exports results :tangle yes :cache no
+  galtquery <- "select s.spcextcode1 as accession,
+	   a.ansTimeMeasured as measured_time,
+	   s.spcExtcode2 as form,
+	   sd.sd2GestationAge as ga,
+	   sd.sd2Weight as bw,
+	   sd.sd2AgeAtCollection as aoc,
+	   a.ansvalueplain as result,
+	   va.ResultCode as result_code
+	   from (select s.specimenid, a.testid, max(answerix) as answerindex
+	   from Answer a inner join specimen s on s.SpecimenID = a.SpecimenID
+	   where a.TestId = 13 
+	   and a.ansStatus = 110
+	   and s.spcextcode1 like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+	   and substring(s.spcextcode1,1,8) between '20180000' and '20190000'
+	   and substring(s.spcextcode1,9,1) not in ('4', '7', '8')
+	   group by s.specimenid, a.TestId) a1
+	   inner join answer a on a1.SpecimenID = a.SpecimenID and a1.AnswerIndex = a.AnswerIX and a1.TestId = a.TestId
+	   inner join specimen s on a1.specimenid = s.specimenid
+	   inner join vw_Answers va on s.spcExtcode1 = va.AccessionNumber and a.TestId = va.TestID
+	   inner join specimendetail2 sd on sd.SpecimenId = va.SpecimenID
+	   order by s.spcextcode1"
+  ## galtdata <- with_con(galtquery)
+  ## write.csv(galtdata, file= paste0("./data/galt_data_", today, ".csv"))
+  galtdata <- read.csv("./data/galt_data_2022-04-07.csv", stringsAsFactors = FALSE)
+  galtdata$measured_time  <- ymd_hms(galtdata$measured_time)
+  galtdata <- na.omit(galtdata)
+#+end_src
+
+#+begin_src R :session *R* :results graphics :file ./figures/galtdens.pdf :exports results :tangle yes
+  galtfilter <-  galtdata %>%
+      filter(result_code %!in% c("GALT-C-01-100", "GALT-C-01-001", "GALT-C-01-012")) ## initial result only
+
+  resultdens(galtfilter$result,"GALT", 1.5, 3.0)
+#+end_src
+
+#+RESULTS:
+[[file:./figures/galtdens.pdf]]
+
+
+#+begin_src R :session *R* :results output :exports results :tangle yes
+  galtarea <- rep(1,5)
+  for (i in 2:6) {
+      galtarea[i-1] <- denssamples(galtfilter$result, 1.5, 0.2, i, direction = "left")
+  }
+  galtarea
+#+end_src
+
+#+RESULTS:
+: [1] "factor: 2, lower: 1.52, upper: 1.89, area: 0.0002, confirmed: 25, missed: 210"
+: [2] "factor: 3, lower: 1.52, upper: 2.09, area: 0.0004, confirmed: 52, missed: 183"
+: [3] "factor: 4, lower: 1.52, upper: 2.29, area: 0.0006, confirmed: 94, missed: 141"
+: [4] "factor: 5, lower: 1.52, upper: 2.50, area: 0.0011, confirmed: 157, missed: 78"
+: [5] "factor: 6, lower: 1.52, upper: 2.70, area: 0.0016, confirmed: 235, missed: 0"
+
+**** GALT proposal
+
+#+begin_src R :session *R* :results output :exports results :tangle yes
+dens <- density(galtfilter$result)
+threshold  <- 1.5
+borderline <- 3.0
+umsd <- 0.2 ##SD at postive threshold
+theight  <- max(dens$y[which(dens$x <= threshold)])
+bheight  <- max(dens$y[which(dens$x <= borderline)])
+quantiles <- quantile(galtdata$result, c(0.025, 0.975))
+start  <- threshold - (6*umsd)
+stop <- threshold + (6*umsd)
+x2 <- seq(start,stop,0.01)
+y2 <- theight*rescale(dnorm(x2,threshold,umsd))
+##rescale(dnorm(x2,pthreshold,0.3))
+## create indices for half of the UM distribution
+halfx2 <- seq(threshold,stop,0.01) 
+#y1alongx2 <- y1[which(x == threshold):which(x == stop)]
+#halfy2 <- y2[which(x2==threshold):which(x2==stop)]
+halfy2 <- y2[121:length(y2)]
+##miny <- pmin(halfy2, y1alongx2)
+pdf("./figures/galtthresholds.pdf")
+plot(x= 0:2*borderline, y = 0:2*bheight, type = "n",
+     xlab = "U/g Hb",
+     ylab = "density")
+
+points(dens,type="l",bty="L",xlab="X",ylab="dnorm(X)")
+abline(v = threshold, col = "red" , lty = 1)
+abline(v = borderline, col = "blue", lty = 1) 
+abline(v = stop, col = "black", lty = 2 )
+## segments(x0=borderline, y0=0,x1 = borderline, y1=bheight,col="blue", lty = 2 )
+## segments(x0=threshold, y0=0,x1 = threshold, y1=theight,col="red", lty = 2 )
+points(x2,y2,type="l",col="red")
+
+## create a vector of zeros
+zeros <- rep(0,length(halfx2))
+
+polygon(c(halfx2,rev(halfx2)),c(halfy2,zeros), border = NA, col="red")
+area <- 0.01 * sum(halfy2)
+samples <- round(area *145000, digits = 0)
+mtext(text= paste("Annual results in red area:",samples), side = 3)
+legend("topright",legend = c("threshold", "borderline", expression(paste("6", sigma))),
+       col = c("red", "blue", "black") ,
+       lty = c("solid","solid", "dashed"))
+dev.off()
+
+#+end_src
+
+
+* TODO Discussion
+* TODO Conclusions
+
+* Acknowledgments
+Funding: None.
+* References
+#+print_bibliography:
+
