@@ -43,7 +43,7 @@
 \end{frontmatter}
 #+END_EXPORT
 
-* Notes
+* COMMENT Notes                                                          
 ** Focused Report
 - The Focused Report category is intended for concise method
   evaluation contributions and succinct clinical manuscripts. All
@@ -72,38 +72,40 @@ In some instances, editors may request that a submission of another article type
 * STARTED Introduction
 
 Newborn screening commonly uses algorithms based on biomarkers
-measured in dried blood spot samples. These screening algorthims
-generally involve two or more phases of testing. All samples are
-tested in the first phase and during this phase sensitivity is
-emphasised over specificity. The first phase identifies samples with
-higher probability of disease for additional testing using an approach
-that ideally maintains high sensitivity with improved
+measured in dried blood spot samples to identify neonates with an
+increased probability of a target disorder. These screening
+algorithms generally involve two or more phases of testing. All
+samples are tested in the first phase and during this phase
+sensitivity is emphasised over specificity, to identify samples with
+higher probability of disease for additional investigation using an
+approach that maintains high sensitivity with improved
 specificity. Ideally an orthogonal analytical method or a different
-biomarker is examined in the second phase of screening, however in a
-number of disorders the same method is used in the second phase of
-screening to measure the sample in duplicate with a more specific
-screening threshold applied to the mean of biomarker measurements
-(Figure [[fig:algorithm]]). This approach improves the precision of the
-final screening result to reduce the change that a sample will be
-deemed screen negative due to analytical imprecision.
+biomarker(s) are employed in the second phase of screening, however in
+a number of disorders the same assay is applied in duplicate during
+the second phase of screening with a more specific confirmation
+threshold applied to the mean of three biomarker measurements (Figure
+[[fig:algorithm]]). This approach improves the precision of the final
+screening result, reducing the chance that a sample will be deemed
+screen negative due to analytical imprecision.
 
-Screen positive thresholds in newborn screening are set based on the
-distribution of the biomarker: in the healthy population, the affected
-population and specific sub-populations based on demographics such as
-age, gestational age and birth weight. The goal of the laboratory is
-then to identify samples with abnormal biomarker results. The
-uncertainty of measurement of the screening method for analyte
-concentrations near the screening threshold is useful in determining
-an appropriate initial screen threshold to prompt repeat testing and
-reduce the effect analytical imprecision on screening
-determinations. The probability that a laboratory will incorrectly
-assign a screen positive or negative determination due to measurement
-error can be estimated from the area under the standardized normal
-distribution.
+Screening threshold values used in newborn screening are set based on
+the distribution of the biomarker: in the healthy population, the
+affected population and specific sub-populations based on demographics
+such as age, gestational age and birth weight. The goal of the
+laboratory is to identify samples with abnormal biomarker results
+relative to these screening thresholds. The imprecision of the
+screening method at analyte concentrations near the screening
+threshold is useful in determining an appropriate initial screen
+threshold to prompt repeat testing and reduce the effect analytical
+imprecision on screening determinations (Figure [[fig:algorithm]]). The
+probability that a laboratory will incorrectly assign a screen
+negative determination due to measurement error can be estimated from
+the probability of a result near the screening in the screening
+population and the imprecision of the method at the screening
+threshold. This approach will be illustrated using the example of
+newborn screening for galactosemia.
 
-Newborn screening for galactosemia at Newborn Screening Ontario is one
-of a number of disease that follow the screening algorithm described
-above. Newborn screening for galactosemia is based on measurement of
+Newborn screening for galactosemia is based on measurement of
 galactose-1-phosphate uridylyltransferase (GALT) activity in dried
 blood spots. All samples are testing for GALT activity, GALT activity
 is then tested in duplicate for all samples with activity below the
@@ -113,7 +115,7 @@ confirmation phase are also subjected to medical scientific
 review. Newborn screening for galactosemia will be used to demonstrate
 the use of uncertainty of measurement for establishing thresholds in a
 multi-stage testing algorithm, however this approach is applicable to
-many testing scenarios in which biomarker results in a "grey-area"
+many testing scenarios in which biomarker results in a grey zone
 must be identified for further investigation.
 
 - Analytical drift due to factors such as calibrations and weather can
@@ -125,9 +127,9 @@ must be identified for further investigation.
 #+BEGIN_SRC dot :file ./figures/screening_phases.pdf :cmdline -Kdot -Tpdf
     digraph {
         node [fontsize = 18];
-        first[label="GALT Activity",shape="rectangle",fontcolor=white,fillcolor=steelblue3, style="rounded,filled"];
+        first[label="Biomarker Measurement",shape="rectangle",fontcolor=white,fillcolor=steelblue3, style="rounded,filled"];
         init[label="&#8804; Initial Cutoff",shape="diamond",fillcolor= grey85, style="rounded,filled"];
-        second[label="GALT Activity",shape="rectangle", fontcolor=white,fillcolor=steelblue3, style="rounded,filled"];
+        second[label="Biomarker Measurement",shape="rectangle", fontcolor=white,fillcolor=steelblue3, style="rounded,filled"];
         conf[label="&#8804; Confirm Cutoff",shape="diamond",fillcolor= grey85, style="rounded,filled"];
         pos[label = "Screen\nPositive", shape="rectangle", fontcolor=white,fillcolor=darkviolet, style="rounded,filled"];
         neg[label = "Screen\nNegative", shape="box", fontcolor=white,fillcolor=forestgreen, style="rounded,filled"];
@@ -140,79 +142,73 @@ must be identified for further investigation.
   }
 #+END_SRC
 
-#+CAPTION[]: Simplified Screening Algorithm
+#+CAPTION[]: Simplified Screening Algorithm for a Disorder with Low Biomarker Measurements 
 #+NAME: fig:algorithm
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
 [[file:./figures/screening_phases.pdf]]
 
+\clearpage
 
 * TODO Material and Methods
 ** GALT Activity Data 
 The laboratory information system was queried for all newborn
-screening biotinidase activity results from the first phase of
-screening in the period 2017-01-01 to 2018-12-31 (n = 285,875). This
-data was used to determine the probability density function for GALT
-activity in the population.
+screening GALT activity results from the first phase of screening in
+the period 2017-01-01 to 2018-12-31 (n = 285,875). This data was used
+to determine the probability density function for GALT activity in the
+population.
 
-During the study period dried blood spot GALT activity were measured
+During the study period dried blood spot GALT activity was measured
 on the SpotCheck Pro platform (Astoria Pacific, Oregon USA.). GALT
 activity was reported in units per gram of hemoglobin (U/g Hb). 903
 filter paper was used for dried blood spot sample collection (EBF,
 South Carolina, USA).
 
-
-
-** TODO Uncertainty of Measurement
-The precision of the GALT activity assay at the confirm screening
+** Assay Impression at Screening Threshold
+The standard deviation of the GALT activity assay at the confirmation
 threshold (1.5 U/g Hg) was determined based on six months of quality
-control (QC) data for a QC material with mean GALT activity of 1.6 U/g Hg.
-*How many data points in six months of QC data*
+control (QC) data for a QC material with mean GALT activity of 1.6 U/g
+Hg.  *How many data points in six months of QC data*
 
 ** Simulation
-
-
-The probability that a sample will will be incorrectly assigned a
-screen positive or negative result owing to measurement error was
-estimated from the area under the standardized normal distribution
-with mean (\mu) equal to the confirmation threshold, and the standard
-deviation (\theta) of quality control results near the confirmation
-threshold (Equation \ref{eq:error}).
+A simulation was used to examine multiple initial screening thresholds
+where each initial threshold (I) is the confirmation threshold (C)
+plus K number of standard deviation for K from 0 to 6 (Equation
+\ref{eq:initial}). For each value of K the predicted annual number of
+samples in grey zone between the confirm and initial threshold was
+estimated by the area in this region of the probability density
+function of GALT activity in the population.
 
 #+BEGIN_EXPORT LaTeX
-\begin{equation}\label{eq:error}
-X \sim N(\mu, \theta^2)
+\begin{equation}\label{eq:initial}
+I = C + K\sigma , \{n|0\ge K\le6\} 
 \end{equation}
 #+END_EXPORT
 
 The number of samples potentially affected by measurement imprecision
-at the screening threshold can be estimated by the area under the
+at the screening threshold was estimated by the area under the
 probability density function of measurement error after scaling for
-the probability of a result at that concentration in the population.
+the probability of a result at the confirmation threshold in the
+population (Equation \ref{eq:scaled}). Imprecision at the screening
+threshold was modelled using a standardized normal distribution with
+mean (\mu) equal to the confirmation threshold, and the standard
+deviation (\sigma) of quality control results at the screening
+threshold (Equation \ref{eq:error}). For each value of K used to set
+an initial threshold (Equation \ref{eq:initial}) the number of samples
+predicted to be affected by measurement imprecision and not included
+in the grey zone was determined.
 
 #+BEGIN_EXPORT LaTeX
 \begin{equation}\label{eq:scaled}
- N(\mu, \theta^2) \cdot Pr_population[GALT = 1.5] 
+f(x) = \frac{e^{-(x-\mu)^2/2\sigma^2}}{\sigma \sqrt[2]{2\pi}} \cdot Pr[GALT = Threshold] 
 \end{equation}
 #+END_EXPORT
 
-
-This probability distribution for measurement error was superimposed
-on the distribution of GALT activity results from the population in
-order to determine the number of samples that are potentially affected
-by measurement imprecision at the screening threshold (Figure
-[[fig:uncertain]]).
-
-
-- The uncertainty of measurement approach uses an expansion factor
-  of 2. This would result an \sim 2% probability of a false negative
-  result (Table [[tab:sigma]]).
-- The tolerance for a false negative first tier screening result at
-  NSO is very low, therefore, the most appropriate expansion factor
-  should be applied.
-
-
-
+#+BEGIN_EXPORT LaTeX
+\begin{equation}\label{eq:error}
+X \sim N(\mu, \sigma^2)
+\end{equation}
+#+END_EXPORT
 
 ** TODO Software
 The manuscript was prepared using the Org-mode environment for
@@ -224,33 +220,37 @@ for all data analysis with tidyverse packages for data manipulation,
 analysis are available here:
 https://github.com/hendersonmpa/imprecision_logic_manuscript.git
 
-
-
 * STARTED Results
 
-A simulation was run to determine the number of samples in the "grey
-area" and "uncertain area" as a function of the GALT activity
-threshold used in the initial phase of screening (Figure
-[[fig:uncertain]]). The grey area is the region between the initial and
-confirmation thresholds and all samples with GALT activity in this
-range are repeated (Figure [[fig:algorithm]]). The uncertain area is based
-on the analytical imprecision of the GALT assay at the confirmation
-threshold.
+There are two main considerations when determining where to set the
+initial threshold in a screening algorithm, one is the number of
+samples that would require repeat testing and the other is the
+potential for a false negative result during the first phase of
+testing that does result in repeat analysis of the sample. A
+simulation was run to determine the number of samples that would fall
+in the "grey zone" and require repeat testing and those in "false
+negative zone" as a function of the GALT activity threshold used in
+the initial phase of screening (Figure [[fig:imprecision]]). The "grey
+zone" is the region between the initial and confirmation thresholds
+and all samples with GALT activity in this range are repeated in
+duplicate (Figure [[fig:algorithm]]). All GALT results above the initial
+threshold are potentially false negative however the probablity that
+the result is falsely negative do to analytical imprecision is
+determined by they analytical imprecision at the confirmation
+threshold (Figure [[fig:imprecision]], 1 \sigma threshold and red area).
 
-The scaled probability distribution for measurement error was
-superimposed on the distribution of GALT activity results from the
-population in order to determine the number of samples that are
-potentially affected by measurement imprecision at the screening
-threshold 
+There is a trade-off between the number of samples that require repeat
+testing and the number that could be false negative due to analytical
+imprecision. The tolerance for a false negative first tier screening
+results in newborn screening is very low, therefore, the most
+appropriate expansion factor should be applied to avoid this
+possibility. Table \ref{tab:imprecision} shows the predicted number of
+annual samples in the repeat zone and false negative zone.
 
-The number of samples in the grey area is determined by the distance
-between the initial and confirmation thresholds and can be estimated
-by the area in this region of the probability density function of GALT
-activity in the population.
-#+begin_src R :session *R* :results values :exports results :tangle yes
+#+begin_src R :session *R* :results values :exports none :tangle yes
   library("tidyverse")
   library("lubridate")
-  library("readxl")
+#  library("readxl")
   library("RODBC")
   library("xtable")
   options(warn=-1) ## options(warn=0) to turn back on
@@ -310,36 +310,12 @@ activity in the population.
     list(factor, initial, grey_area_samples, uncertain_area_samples)
   }
 
-  ### accept data, initial and confirm thresholds
-  ### return a density plot polygon area calculated
-  thresholdplot <- function(data, initial, confirm,  units) {
-    dens <- density(data)
-    plot(dens, xlab = units, col = "grey", main = "")
-    polygon(dens, col= "grey", border = NA)
-    abline(v = initial , col = "black", lty = 2)
-    abline(v = confirm , col = "black" )
-    with(dens, polygon(x=c(initial, initial, x[x <= initial]), y=c(0, y[x <= initial], y[x=initial]),col = "deepskyblue", border = "deepskyblue"))
-    with(dens, polygon(x=c(confirm, confirm, x[x <= confirm]), y=c(0, y[x <=confirm], y[x=confirm] ), col="darkred", border = "darkred"))
-    initial_area <- densarea(dens, lower = min(data), upper = initial)
-    confirm_area <- densarea(dens, lower = min(data), upper = confirm)
-    legend("topright",
-	   legend = c(paste0("Initial: ", initial),
-		      paste0(round(initial_area*100, digits = 2),"%"),
-		      paste0("Confirm: ", confirm),
-		      paste0(round(confirm_area*100, digits = 2),"%")),
-	   bty = "n",
-	   col = c("black", "deepskyblue",
-		   "black", "darkred"),
-	   lty = c(2, NA, 1, NA),
-	   pch = c(NA, 15, NA, 15))
-  }
-
-#+end_src
+p#+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :session *R* :results values :exports results :tangle yes :cache no
+#+begin_src R :session *R* :results values :exports none :tangle yes :cache no
   galtquery <- "select s.spcextcode1 as accession,
 	   a.ansTimeMeasured as measured_time,
 	   s.spcExtcode2 as form,
@@ -373,105 +349,107 @@ activity in the population.
 
 #+RESULTS:
 
+#+begin_src R :session *R* :results output graphics file :file ./figures/galtthresholds.pdf :exports results :tangle yes
+  dens <- density(galtfilter$result)
+  sd <- 0.2 ##SD at postive confirm
+  confirm  <- 1.5
+  initial <- confirm + (6*sd)
+  theight  <- max(dens$y[which(dens$x <= confirm)])
+  bheight  <- max(dens$y[which(dens$x <= initial)])
+  ## defining the region of FN uncertainty
+  start  <- confirm - (6*sd)
+  stop <- initial
+  x2 <- seq(start,stop,0.01)
+  y2 <- theight*rescale(dnorm(x2,confirm,sd))
+  ## create indices for half of the UM distribution
+  halfx2 <- seq(confirm,stop,0.01)
+  halfy2 <- y2[length(halfx2):length(x2)]
+
+  plot(x= 0:2*confirm, y = 0:2*bheight, type = "n",
+       xlab = "U/g Hb",
+       ylab = "density")
+
+  polygon(dens,col = "steelblue", border = "steelblue")
+  with(dens, polygon(x=c(initial, initial, x[x < initial]), y=c(0, y[x=initial], y[x < initial]), col="grey75", border = "grey75"))
+  with(dens, polygon(x=c(x[x <= confirm], confirm, confirm), y=c(y[x <= confirm], y[x=confirm], 0), col = "black", border = "black"))
+
+  ## area of uncertainty
+  points(x2,y2,type="l",col="red") ## region of uncertainty of measurment
+  zeros <- rep(0,length(halfx2)) # create a vector of zeros
+  polygon(c(halfx2,rev(halfx2)),c(halfy2,zeros), border = NA, col="red")
+  #area <- 0.01 * sum(halfy2)
+  #samples <- round(area *145000, digits = 0)
+  #text(x = 0.55, y = 0.004, label= paste("Annual results in red area:",samples), side = 3)
+
+  abline(v = confirm, col = "red" , lty = 1, lwd = 2)
+  abline(v = initial, col = "black", lty = 1, lwd = 2)
+  abline(v = confirm + (1*sd), col = "black", lty = 2, lwd = 2) 
+
+  legend("topleft",
+	 legend = c("positive", "grey zone", "negative", 
+		     "false negative zone","confirmation threshold",
+		    expression(paste("1", sigma, " threshold")),
+		    expression(paste("6", sigma, " threshold"))),
+	 col = c("black", "grey75", "steelblue" , "red", "red", "black", "black"),
+	 lty = c(NA, NA, NA, NA, "solid", "dashed", "solid"),
+	 pch = c(15, 15, 15, 15, NA, NA, NA))
+#+end_src
+
+#+CAPTION[]: The left side of the GALT activity population distribution. 
+#+NAME: fig:imprecision
+#+ATTR_LaTeX: :width 0.9\textwidth
+#+RESULTS:
+[[file:./figures/galtthresholds.pdf]]
+
 
 #+begin_src R :session *R* :results output latex :exports results :tangle yes
   ## initialize the dataframe
-  galtarea <- data.frame(factor = double(),
-			  initial = double(),
-			  grey = double(),
-			  uncertain = double(),
-			  stringsAsFactors = FALSE)
+  galtarea <- data.frame(factor = double(), initial = double(),
+			 grey = double(), imprecision = double(),
+			 stringsAsFactors = FALSE)
 
-  ## populate the dataframe
+	  ## populate the dataframe
   for (i in 0:6) {
     galtarea[i+1,] <- denssamples(galtfilter$result, 1.5, 0.2, i, direction = "left")
   }
 
-  galtarea %>%
-    rename("Expansion Factor" = factor,
-	   "Initial Positive Threshold" = initial ,
-	    "Grey Area Samples" = grey,
-	    "Analytically Uncertain Samples" = uncertain) %>%
-    xtable(caption = "Uncertainty of Measurement Based Initial Screening Thresholds with Predicted Repeat Samples Population Data",
-	   label = "tab:uncertain", display = c("d", "d", "f", "f", "g")) %>%
-    print(include.rownames = FALSE)
+  galtarea %>% rename("Expansion Factor" = factor,
+		      "Initial Threshold" = initial,
+		      "Grey Zone Samples" = grey,
+		      "False Negative Zone Samples" =  imprecision) %>%
+    xtable(caption = "Imprecision Based Initial Thresholds",
+	    label = "tab:imprecision", display = c("d", "d", "f", "f", "g")) %>%
+	    print(include.rownames = FALSE)
     #+end_src
 
 #+RESULTS:
 #+begin_export latex
 % latex table generated in R 4.0.3 by xtable 1.8-4 package
-% Tue Apr 26 12:15:06 2022
+% Thu Apr 28 17:18:16 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
-Expansion Factor & Initial Positive Threshold & Grey Area Samples & Analytically Uncertain Samples \\ 
+Expansion Factor & Initial Threshold & Grey Area Samples & Imprecsion Area Samples \\ 
   \hline
-  0 & 1.50 & 0.00 &  10 \\ 
-    1 & 1.70 & 11.60 & 3.2 \\ 
-    2 & 1.90 & 33.35 & 0.48 \\ 
-    3 & 2.10 & 60.90 & 0.029 \\ 
-    4 & 2.30 & 117.45 & 0.00069 \\ 
-    5 & 2.50 & 198.65 & 6.3e-06 \\ 
-    6 & 2.70 & 304.50 & 9.7e-23 \\ 
+  0 & 1.50 & 0.00 & 9.5 \\ 
+    1 & 1.70 & 10.15 & 3.1 \\ 
+    2 & 1.90 & 23.20 & 0.45 \\ 
+    3 & 2.10 & 49.30 & 0.027 \\ 
+    4 & 2.30 & 92.80 & 0.00066 \\ 
+    5 & 2.50 & 142.10 & 6e-06 \\ 
+    6 & 2.70 & 221.85 & 9.2e-23 \\ 
    \hline
 \end{tabular}
-\caption{Uncertainty of Measurement Based Initial Screening Thresholds with Predicted Repeat Samples Population Data} 
-\label{tab:uncertain}
+\caption{Imprecision Based Initial Thresholds} 
+\label{tab:imprecision}
 \end{table}
 #+end_export
 
-
-#+begin_src R :session *R* :results output graphics file :file ./figures/galtthresholds.pdf :exports results :tangle yes
-  dens <- density(galtfilter$result)
-  sd <- 0.2 ##SD at postive threshold
-  threshold  <- 1.5
-  borderline <- threshold + (6*sd)
-  theight  <- max(dens$y[which(dens$x <= threshold)])
-  bheight  <- max(dens$y[which(dens$x <= borderline)])
-  ## defining the region of FN uncertainty
-  start  <- threshold - (6*sd)
-  stop <- borderline
-  x2 <- seq(start,stop,0.01)
-  y2 <- theight*rescale(dnorm(x2,threshold,sd))
-  ## create indices for half of the UM distribution
-  halfx2 <- seq(threshold,stop,0.01)
-  halfy2 <- y2[length(halfx2):length(x2)]
-
-  plot(x= 0:2*threshold, y = 0:2*bheight, type = "n",
-       xlab = "U/g Hb",
-       ylab = "density")
-  polygon(dens,col = "steelblue", border = "steelblue")
-
-  with(dens, polygon(x=c(borderline, borderline, x[x < borderline]), y=c(0, y[x=borderline], y[x < borderline]), col="grey75", border = "grey75"))
-  with(dens, polygon(x=c(x[x <= threshold], threshold, threshold), y=c(y[x <= threshold], y[x=threshold], 0), col = "black", border = "black"))
-
-  abline(v = threshold, col = "red" , lty = 2)
-  abline(v = borderline, col = "black", lty = 2) 
-  points(x2,y2,type="l",col="red") ## region of uncertainty of measurment
-
-  ## area of uncertainty
-  zeros <- rep(0,length(halfx2)) # create a vector of zeros
-  polygon(c(halfx2,rev(halfx2)),c(halfy2,zeros), border = NA, col="red")
-  area <- 0.01 * sum(halfy2)
-  samples <- round(area *145000, digits = 0)
-  text(x = 0.55, y = 0.004, label= paste("Annual results in red area:",samples), side = 3)
-  legend("topleft",
-	 legend = c("positive", "grey zone",
-		    "negative", "confirmation threshold",
-		    expression(paste("6", sigma, "initial threshold")), "measurement uncertainty"),
-	 col = c("black", "grey75", "steelblue", "red", "black", "red") ,
-	 lty = c(NA, NA, NA, "dashed", "dashed", NA),
-	 pch = c(15, 15, 15, NA, NA, 15))
-#+end_src
-
-#+CAPTION[]: The left side of the GALT activity population distribution. 
-#+NAME: fig:uncertain 
-#+ATTR_LaTeX: :width 0.9\textwidth
-#+RESULTS:
-[[file:./figures/galtthresholds.pdf]]
+\clearpage
 
 * TODO Discussion
+
 #+CAPTION[sigma]: Probability of a false negative screen due to imprecision
 #+NAME: tab:sigma
 | SD | probability of false negative | count
@@ -482,7 +460,6 @@ Expansion Factor & Initial Positive Threshold & Grey Area Samples & Analytically
 |  4 |                 3.167124ee-05 |
 |  5 |                 2.866516ee-07 |
 |  6 |                 9.865876ee-10 |
-
 
 * TODO Conclusions
 
