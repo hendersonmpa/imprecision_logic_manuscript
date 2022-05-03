@@ -124,7 +124,7 @@ must be identified for further investigation.
 
 
 
-#+BEGIN_SRC dot :file ./figures/screening_phases.pdf :cmdline -Kdot -Tpdf
+#+BEGIN_SRC dot :file ./figures/algorithm.pdf :cmdline -Kdot -Tpdf
     digraph {
         node [fontsize = 18];
         first[label="Biomarker Measurement",shape="rectangle",fontcolor=white,fillcolor=steelblue3, style="rounded,filled"];
@@ -146,7 +146,7 @@ must be identified for further investigation.
 #+NAME: fig:algorithm
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
-[[file:./figures/screening_phases.pdf]]
+[[file:./figures/algorithm.pdf]]
 
 \clearpage
 
@@ -222,30 +222,34 @@ https://github.com/hendersonmpa/imprecision_logic_manuscript.git
 
 * STARTED Results
 
-There are two main considerations when determining where to set the
-initial threshold in a screening algorithm, one is the number of
-samples that would require repeat testing and the other is the
-potential for a false negative result during the first phase of
-testing that does result in repeat analysis of the sample. A
+Two considerations when determining where to set the initial threshold
+in a two step screening algorithm (Figure [[fig:algorithm]]) are the
+number of samples that would require repeat testing and the potential
+for a false negative result during the first phase of testing. A
 simulation was run to determine the number of samples that would fall
 in the "grey zone" and require repeat testing and those in "false
 negative zone" as a function of the GALT activity threshold used in
 the initial phase of screening (Figure [[fig:imprecision]]). The "grey
 zone" is the region between the initial and confirmation thresholds
 and all samples with GALT activity in this range are repeated in
-duplicate (Figure [[fig:algorithm]]). All GALT results above the initial
-threshold are potentially false negative however the probablity that
-the result is falsely negative do to analytical imprecision is
-determined by they analytical imprecision at the confirmation
-threshold (Figure [[fig:imprecision]], 1 \sigma threshold and red area).
+duplicate in the second phase of screening (Figure [[fig:algorithm]]). All
+GALT results above the initial threshold are potentially false
+negative however the probablity that the result is falsely negative do
+to analytical imprecision is determined by the analytical imprecision
+at the confirmation threshold and how far the result is from the
+confirmation threshold. Figure [[fig:imprecision]] shows that a GALT result 1 \sigma
+from the confirmation threshold falls within the false negative zone
+(red area).
 
 There is a trade-off between the number of samples that require repeat
 testing and the number that could be false negative due to analytical
 imprecision. The tolerance for a false negative first tier screening
 results in newborn screening is very low, therefore, the most
 appropriate expansion factor should be applied to avoid this
-possibility. Table \ref{tab:imprecision} shows the predicted number of
-annual samples in the repeat zone and false negative zone.
+possibility. There is also a cost involved in repeat testing and the
+use of sometime scarce sample. Table \ref{tab:imprecision} shows the
+estimated number of samples in the repeat zone and false negative zone
+annually.
 
 #+begin_src R :session *R* :results values :exports none :tangle yes
   library("tidyverse")
@@ -310,10 +314,9 @@ annual samples in the repeat zone and false negative zone.
     list(factor, initial, grey_area_samples, uncertain_area_samples)
   }
 
-p#+end_src
+#+end_src
 
 #+RESULTS:
-
 
 #+begin_src R :session *R* :results values :exports none :tangle yes :cache no
   galtquery <- "select s.spcextcode1 as accession,
@@ -388,14 +391,14 @@ p#+end_src
   legend("topleft",
 	 legend = c("positive", "grey zone", "negative", 
 		     "false negative zone","confirmation threshold",
-		    expression(paste("1", sigma, " threshold")),
+		    expression(paste("1", sigma, " result")),
 		    expression(paste("6", sigma, " threshold"))),
 	 col = c("black", "grey75", "steelblue" , "red", "red", "black", "black"),
 	 lty = c(NA, NA, NA, NA, "solid", "dashed", "solid"),
 	 pch = c(15, 15, 15, 15, NA, NA, NA))
 #+end_src
 
-#+CAPTION[]: The left side of the GALT activity population distribution. 
+#+CAPTION[]: The left side of the GALT activity population distribution, illustrating the imprecsion at the confirmation threshold. 
 #+NAME: fig:imprecision
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
@@ -417,7 +420,7 @@ p#+end_src
 		      "Initial Threshold" = initial,
 		      "Grey Zone Samples" = grey,
 		      "False Negative Zone Samples" =  imprecision) %>%
-    xtable(caption = "Imprecision Based Initial Thresholds",
+    xtable(caption = "Imprecision based initial threshold simulation results. In each simulation the conifirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by a the corresponding expansion factor using (Equation \ref{eq:initial}) ",
 	    label = "tab:imprecision", display = c("d", "d", "f", "f", "g")) %>%
 	    print(include.rownames = FALSE)
     #+end_src
