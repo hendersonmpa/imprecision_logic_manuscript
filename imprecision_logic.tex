@@ -1,4 +1,4 @@
-% Created 2022-05-03 Tue 14:46
+% Created 2022-05-24 Tue 17:13
 % Intended LaTeX compiler: pdflatex
 \documentclass[review]{elsarticle}
 \usepackage[utf8]{inputenc}
@@ -53,7 +53,7 @@
 \end{frontmatter}
 
 \section*{{\bfseries\sffamily TODO} Abstract (250 words)}
-\label{sec:org51342bc}
+\label{sec:orge940973}
 \begin{description}
 \item[{Introduction}] 
 
@@ -64,77 +64,70 @@
 \item[{Conclusion}] 
 \end{description}
 \section*{{\bfseries\sffamily TODO} Keywords}
-\label{sec:orgb8d68c8}
+\label{sec:orgf2b93f1}
 \section*{{\bfseries\sffamily STARTED} Introduction}
-\label{sec:org231e9f2}
+\label{sec:org126d545}
 
 Newborn screening commonly uses algorithms based on biomarkers
 measured in dried blood spot samples to identify neonates with an
-increased probability of a target disorder. These screening
-algorithms generally involve two or more phases of testing. All
-samples are tested in the first phase and during this phase
-sensitivity is emphasised over specificity, to identify samples with
-higher probability of disease for additional investigation using an
-approach that maintains high sensitivity with improved
-specificity. Ideally an orthogonal analytical method or a different
-biomarker(s) are employed in the second phase of screening, however in
-a number of disorders the same assay is applied in duplicate during
-the second phase of screening with a more specific confirmation
-threshold applied to the mean of three biomarker measurements (Figure
-\ref{fig:org2d6d78d}). This approach improves the precision of the final
+increased probability of a target disorder. These screening algorithms
+generally involve two or more phases of testing. All samples are
+tested in the initial phase and during this phase sensitivity is
+emphasized over specificity to identify samples with higher
+probability of disease for additional investigation. The confirmatory
+phase of testings uses an approach that maintains high sensitivity
+with improved specificity. Ideally an orthogonal analytical method or
+a different biomarker(s) are employed in the confirmatory phase of
+testing, however in a number of disorders the same assay is applied in
+duplicate with a more specific confirmation threshold applied to the
+mean of the three resulting biomarker measurements (Figure
+\ref{fig:orgc1204cf}). This approach improves the precision of the final
 screening result, reducing the chance that a sample will be deemed
 screen negative due to analytical imprecision.
 
-Screening threshold values used in newborn screening are set based on
-the distribution of the biomarker: in the healthy population, the
-affected population and specific sub-populations based on demographics
-such as age, gestational age and birth weight. The goal of the
-laboratory is to identify samples with abnormal biomarker results
-relative to these screening thresholds. The imprecision of the
-screening method at analyte concentrations near the screening
-threshold is useful in determining an appropriate initial screen
-threshold to prompt repeat testing and reduce the effect analytical
-imprecision on screening determinations (Figure \ref{fig:org2d6d78d}). The
-probability that a laboratory will incorrectly assign a screen
-negative determination due to measurement error can be estimated from
-the probability of a result near the screening in the screening
-population and the imprecision of the method at the screening
-threshold. This approach will be illustrated using the example of
-newborn screening for galactosemia.
+Threshold values used in newborn screening are set based on the
+distribution of the biomarker: in the healthy population, the affected
+population and specific sub-populations based on demographics such as
+age, gestational age and birth weight. The goal of the laboratory is
+to identify samples with abnormal biomarker results relative to these
+screening thresholds. When the same assay is used in both the initial
+and confirmatory phases of screening the imprecision of the assay at
+the confirmatory threshold is useful in determining an appropriate
+initial threshold (Figure \ref{fig:orgc1204cf}). The probability that a
+laboratory will incorrectly assign a screen negative determination due
+to analytical imprecision can be estimated from the probability of a
+result near the threshold the imprecision of the method at the
+screening threshold. This approach will be illustrated using the
+example of newborn screening for classic galactosemia (\hyperlink{citeproc_bib_item_6}{Schweitzer 1995}).
 
-Newborn screening for galactosemia is based on measurement of
-galactose-1-phosphate uridylyltransferase (GALT) activity in dried
-blood spots. All samples are testing for GALT activity, GALT activity
-is then tested in duplicate for all samples with activity below the
-initial screening threshold. The mean of the three results is then
-compared to the confirmation threshold. All results of the
-confirmation phase are also subjected to medical scientific
-review. Newborn screening for galactosemia will be used to demonstrate
-the use of uncertainty of measurement for establishing thresholds in a
-multi-stage testing algorithm, however this approach is applicable to
-many testing scenarios in which biomarker results in a grey zone
-must be identified for further investigation.
-
-\begin{itemize}
-\item Analytical drift due to factors such as calibrations and weather can
-result in periodic bias
-\item This should also be considered in determining impression logic
-\end{itemize}
-
+In Ontario, Canada newborn screening for classic galactosemia is based
+on measurement of galactose-1-phosphate uridylyltransferase (GALT)
+activity in dried blood spots (\hyperlink{citeproc_bib_item_1}{Beutler 1991}). All samples are
+tested for GALT activity, this is repeated in duplicate for all
+samples with activity below the initial threshold. The mean of the
+three results is then assessed againset the confirmation threshold to
+determine if the newborn is screen positive or negative for classic
+galactosemia. The classic galactosemia screening process will be used
+to demonstrate an approach for establishing initial thresholds in a
+multi-stage testing algorithm based on biomarker distribution in a
+population and analytical imprecision at the confirmation
+threshold. While newborn screening is being used to demonstrate this
+approach it is applicable to many testing scenarios in which biomarker
+results in a grey zone must be identified for further investigation.
 
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{./figures/algorithm.pdf}
-\caption{\label{fig:org2d6d78d}Simplified Screening Algorithm for a Disorder with Low Biomarker Measurements}
+\caption{\label{fig:orgc1204cf}Simplified Screening Algorithm for a Disorder with Low Biomarker Measurements}
 \end{figure}
 
 \clearpage
 
-\section*{{\bfseries\sffamily TODO} Material and Methods}
-\label{sec:orgdc50fe1}
+\section*{{\bfseries\sffamily STARTED} Material and Methods}
+\label{sec:org92ee49c}
 \subsection*{GALT Activity Data}
-\label{sec:orga6f5bc0}
+\label{sec:org7270fd0}
 The laboratory information system was queried for all newborn
 screening GALT activity results from the first phase of screening in
 the period 2017-01-01 to 2018-12-31 (n = 285,875). This data was used
@@ -148,14 +141,14 @@ filter paper was used for dried blood spot sample collection (EBF,
 South Carolina, USA).
 
 \subsection*{Assay Impression at Screening Threshold}
-\label{sec:org6c17384}
+\label{sec:org12b910c}
 The standard deviation of the GALT activity assay at the confirmation
 threshold (1.5 U/g Hg) was determined based on six months of quality
 control (QC) data for a QC material with mean GALT activity of 1.6 U/g
 Hg.  \textbf{How many data points in six months of QC data}
 
 \subsection*{Simulation}
-\label{sec:org811c5ec}
+\label{sec:org9128cdd}
 A simulation was used to examine multiple initial screening thresholds
 where each initial threshold (I) is the confirmation threshold (C)
 plus K number of standard deviation for K from 0 to 6 (Equation
@@ -189,56 +182,60 @@ f(x) = \frac{e^{-(x-\mu)^2/2\sigma^2}}{\sigma \sqrt[2]{2\pi}} \cdot Pr[GALT = Th
 X \sim N(\mu, \sigma^2)
 \end{equation}
 
-\subsection*{{\bfseries\sffamily TODO} Software}
-\label{sec:orga4cf3fb}
+\subsection*{Software}
+\label{sec:orgd4e9dfc}
 The manuscript was prepared using the Org-mode environment for
-literate programming and reproducible research (\hyperlink{citeproc_bib_item_1}{Schulte et al. 2012}). The R language for statistical computing was used
-for all data analysis with tidyverse packages for data manipulation,
-\textbf{update} (\hyperlink{citeproc_bib_item_2}{Team 2020}; \hyperlink{citeproc_bib_item_3}{Wickham et al. 2019}). R scripts used for data
-analysis are available here:
+literate programming and reproducible research (\hyperlink{citeproc_bib_item_5}{Schulte et al. 2012}). The R language for statistical computing was used
+for all data analysis with RODBC for relational database access,
+tidyverse packages for data manipulation, lubridate for dates and
+times and xtable for exporting tables to
+\latex[cite:@R2020;@rodbc;@tidyverse;@lubridate;@xtable]. R scripts
+used for data analysis are available here:
 \url{https://github.com/hendersonmpa/imprecision\_logic\_manuscript.git}
 
 \section*{{\bfseries\sffamily STARTED} Results}
-\label{sec:orgbec5c8d}
+\label{sec:org1548d3c}
 
-Two considerations when determining where to set the initial threshold
-in a two step screening algorithm (Figure \ref{fig:org2d6d78d}) are the
-number of samples that would require repeat testing and the potential
-for a false negative result during the first phase of testing. A
-simulation was run to determine the number of samples that would fall
-in the "grey zone" and require repeat testing and those in "false
-negative zone" as a function of the GALT activity threshold used in
-the initial phase of screening (Figure \ref{fig:org9bfd3ab}). The "grey
-zone" is the region between the initial and confirmation thresholds
-and all samples with GALT activity in this range are repeated in
-duplicate in the second phase of screening (Figure \ref{fig:org2d6d78d}). All
-GALT results above the initial threshold are potentially false
-negative however the probablity that the result is falsely negative do
-to analytical imprecision is determined by the analytical imprecision
-at the confirmation threshold and how far the result is from the
-confirmation threshold. Figure \ref{fig:org9bfd3ab} shows that a GALT result 1 \(\sigma\)
-from the confirmation threshold falls within the false negative zone
-(red area).
+Two considerations when determining the threshold value used in the
+initial phase of a two step screening algorithm (Figure \ref{fig:orgc1204cf})
+are the number of samples that would require repeat testing and the
+potential for a false negative result during the first phase of
+testing.  The "grey zone" is the region between the initial and
+confirmation thresholds and all samples with GALT activity in this
+range are repeated in duplicate in the second phase of screening
+(Figure \ref{fig:orgc1204cf} and \ref{fig:orgb4f7a9b}). The "false negative zone"
+is the region outside the "grey zone" but within the distribution of
+analytical imprecision at the screening threshold (Figure
+\ref{fig:orgb4f7a9b}). All GALT results above the initial threshold are
+potentially false negative however the probablity that the result is
+falsely negative do to analytical imprecision is determined by the
+analytical imprecision at the confirmation threshold and how far the
+result is from the confirmation threshold.
 
-There is a trade-off between the number of samples that require repeat
-testing and the number that could be false negative due to analytical
-imprecision. The tolerance for a false negative first tier screening
-results in newborn screening is very low, therefore, the most
-appropriate expansion factor should be applied to avoid this
-possibility. There is also a cost involved in repeat testing and the
-use of sometime scarce sample. Table \ref{tab:imprecision} shows the
+A simulation was run to determine the number of samples that would
+fall in the "grey zone" and require repeat testing and those that in
+the "false negative zone" as a function of the GALT activity threshold
+used in the initial phase of screening (Table
+[tab:imprecision]]). There is a trade-off between the number of
+samples that require repeat testing and the number that could be false
+negative due to analytical imprecision. In newborn screening the
+tolerance for a false negative first tier screening result is very
+low, therefore, the most appropriate expansion factor should be
+applied to avoid this possibility. There is also a cost involved in
+repeat testing and the possibility that there is not adequate sample
+which would prompt recollection. Table \ref{tab:imprecision} shows the
 estimated number of samples in the repeat zone and false negative zone
-annually.
+annually for a set of initial thresholds.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{./figures/galtthresholds.pdf}
-\caption{\label{fig:org9bfd3ab}The left side of the GALT activity population distribution, illustrating the imprecsion at the confirmation threshold.}
+\caption{\label{fig:orgb4f7a9b}The left side of the GALT activity population distribution, illustrating the imprecsion at the confirmation threshold.}
 \end{figure}
 
 
 % latex table generated in R 4.0.3 by xtable 1.8-4 package
-% Tue May  3 14:46:09 2022
+% Tue May 24 17:13:10 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
@@ -260,37 +257,60 @@ Expansion Factor & Initial Threshold & Grey Zone Samples & False Negative Zone S
 
 \clearpage
 
-\section*{{\bfseries\sffamily TODO} Discussion}
-\label{sec:org38c1bb3}
+\section*{{\bfseries\sffamily STARTED} Discussion}
+\label{sec:org2f8f351}
 
-\begin{table}[htbp]
-\caption[sigma]{\label{tab:org80c9190}Probability of a false negative screen due to imprecision}
-\centering
-\begin{tabular}{rrl}
-SD & probability of false negative & count\\
-\hline
-1 & 0.1586553\\
-2 & 0.02275013\\
-3 & 0.001349898\\
-4 & 3.167124ee-05\\
-5 & 2.866516ee-07\\
-6 & 9.865876ee-10\\
-\end{tabular}
-\end{table}
+We have used a testing algorithm used in newborn screening for
+galactosemia to demonstrate how data on analytical imprecision and
+biomarker distribution in a population and can be used to evaluate
+screening thresholds. The ideas discussed here are second nature to
+the clinical laboratory professional; there is analytical imprecision
+in all laboratory results and results at the extremes of the
+population distribution are rare. The utility of this approach is in
+combining this information to get an estimate the impact in terms of
+false negative results and the number of samples sent for confirmatory
+testing based on the analytical impression of results near a
+clinically relevant threshold value, this could be a screening
+threshold or a diagnostic threshold. This information could be used to
+decided on appropriate initial phase thresholds and plan for the
+number of samples expected to require confirmatory testing.
 
-\section*{{\bfseries\sffamily TODO} Conclusions}
-\label{sec:orgf9e2397}
+While a use case in newborn screening was used to demonstrate this
+approach it is applicable to any area of laboratory medicine where a
+sensitive test is used to identify samples that require additional
+investigation with a more complex and informative method. Examples
+from other areas of laboratory medicine include but are by no means
+limited to confirmation of hepatitis B serology results,
+spectrophotometric measurement of total urine porphyrins to identify
+samples that require chromatographic fractionation of urine
+porphyrins, confirmation of low point of care glucose results by the
+central laboratory (\hyperlink{citeproc_bib_item_2}{Chen and Kaplan 2006}; \hyperlink{citeproc_bib_item_3}{Deacon 2001}; \hyperlink{citeproc_bib_item_4}{Lum 1996}).
+
+The approach outlined here has focused exclusively on the impact of
+method precision on a two phase testing process. Analytical bias and
+pre-analytical factors are two categories of error that have not been
+incorporated into the estimate of error at a threshold value however
+this approach could be extended to incorporate total uncertainty of
+measurement (\hyperlink{citeproc_bib_item_7}{White and Farrance 2004}).
 
 \section*{{\bfseries\sffamily DONE} Acknowledgments}
-\label{sec:org253324b}
+\label{sec:org79b7487}
 Funding: None.
 \section*{References}
-\label{sec:org0e3e49e}
+\label{sec:org3657df2}
 \begin{hangparas}{1.5em}{1}
-\hypertarget{citeproc_bib_item_1}{Schulte, Eric, Dan Davison, Thomas Dye, and Carsten Dominik. 2012. “A Multi-Language Computing Environment for Literate Programming and Reproducible Research.” \textit{Journal of Statistical Software} 46 (3):1–11. \href{https://doi.org/10.18637/jss.v046.i03}{https://doi.org/10.18637/jss.v046.i03}.}
+\hypertarget{citeproc_bib_item_1}{Beutler, Ernest. 1991. “Galactosemia: screening and diagnosis.” \textit{Clinical Biochemistry} 24 (4):293–300. \href{https://doi.org/10.1016/0009-9120(91)80003-L}{https://doi.org/10.1016/0009-9120(91)80003-L}.}
 
-\hypertarget{citeproc_bib_item_2}{Team, R Core. 2020. \textit{R: A Language and Environment for Statistical Computing}. Vienna, Austria: R Foundation for Statistical Computing. \href{https://www.R-project.org/}{https://www.R-project.org/}.}
+\hypertarget{citeproc_bib_item_2}{Chen, Dan, and Lawrence A. Kaplan. 2006. “Performance of a new-generation chemiluminescent assay for hepatitis B surface antigen.” \textit{Clinical Chemistry} 52 (8):1592–98. \href{https://doi.org/10.1373/clinchem.2005.064063}{https://doi.org/10.1373/clinchem.2005.064063}.}
 
-\hypertarget{citeproc_bib_item_3}{Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the tidyverse.” \textit{Journal of Open Source Software} 4 (43):1686. \href{https://doi.org/10.21105/joss.01686}{https://doi.org/10.21105/joss.01686}.}
+\hypertarget{citeproc_bib_item_3}{Deacon, AC C. 2001. “ACP Best Practice No 165: Front line tests for the investigation of suspected porphyria.” \textit{Journal of Clinical Pathology} 54 (7):500–507. \href{https://doi.org/10.1136/jcp.54.7.500}{https://doi.org/10.1136/jcp.54.7.500}.}
+
+\hypertarget{citeproc_bib_item_4}{Lum, Gifford. 1996. “Assessment of a critical limit protocol for point-of-care glucose testing.” \textit{American Journal of Clinical Pathology} 106 (3):390–95. \href{https://doi.org/10.1093/ajcp/106.3.390}{https://doi.org/10.1093/ajcp/106.3.390}.}
+
+\hypertarget{citeproc_bib_item_5}{Schulte, Eric, Dan Davison, Thomas Dye, and Carsten Dominik. 2012. “A Multi-Language Computing Environment for Literate Programming and Reproducible Research.” \textit{Journal of Statistical Software} 46 (3):1–11. \href{https://doi.org/10.18637/jss.v046.i03}{https://doi.org/10.18637/jss.v046.i03}.}
+
+\hypertarget{citeproc_bib_item_6}{Schweitzer, Susanne. 1995. “Newborn mass screening for galactosemia.” \textit{European Journal of Pediatrics} 154 (2 Supplement):0–1. \href{https://doi.org/10.1007/BF02143801}{https://doi.org/10.1007/BF02143801}.}
+
+\hypertarget{citeproc_bib_item_7}{White, G H, and I Farrance. 2004. “Uncertainty of measurement in quantitative medical testing: a laboratory implementation guide.” \textit{The Clinical Biochemist. Reviews / Australian Association of Clinical Biochemists} 25 (4):S1–24. \href{http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=1934961&tool=pmcentrez&rendertype=abstract}{http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=1934961\&tool=pmcentrez\&rendertype=abstract}.}
 \end{hangparas}
 \end{document}
