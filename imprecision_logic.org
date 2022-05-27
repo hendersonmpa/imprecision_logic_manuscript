@@ -32,7 +32,7 @@
 
 #+BEGIN_EXPORT LaTeX
 \begin{frontmatter}
-\title{Imprecision Logic}
+\title{An Approach for Evaluating Potential Screening Thresholds used in a Multi-Stage Testing Algorithm Using Biomarker Population Distribution and Analytical Imprecision}
 \author[NSO, UoO]{Matthew P.A. Henderson\corref{cor1}}
 \ead{mhenderson@cheo.on.ca}
 \author[NSO, UO]{Pranesh Chakraborty}
@@ -62,14 +62,30 @@
 
 In some instances, editors may request that a submission of another article type to JALM be decreased to meet the requirements of a Focused Report.
 
-* TODO Abstract (250 words)
-- Introduction :: 
-- Methods ::
-- Results ::
-- Conclusion :: 
-* TODO Keywords
-* STARTED Introduction
-
+* Abstract
+- Background :: The use of a simple but sensitive test to identify
+  samples that require additional investigation with a more complex
+  and informative method is a common paradigm in population screening
+  and laboratory medicine in general. A biomarkers distribution in the
+  tested population and analytical imprecision of the method can be
+  used to guide selection of screening thresholds.
+- Methods :: A simulation using newborn screening the population
+  distribution for galactose-1-phosphate uridylyltransferase (GALT)
+  activity and analytical imprecision for the GALT assay were used to
+  estimate the number of samples that would required repeat analysis
+  and the number with possibly erroneous screening determinations due
+  to analytical imprecision.
+- Results :: In the case of GALT activity screening a conservative
+  initial threshold can essentially eliminate the chance of a false
+  negative screen due to analytical imprecision, the trade off is a
+  greater number of samples requiring follow-up testing.
+- Conclusion :: Selection of thresholds in a screening algorithm is
+  informed by estimates of the number of samples that require repeat
+  testing and the number that could be false negative due to
+  analytical imprecision.
+* Keywords
+analytical imprecision, population distribution, simulation, screening
+* Introduction
 Newborn screening commonly uses algorithms based on biomarkers
 measured in dried blood spot samples to identify neonates with an
 increased probability of a target disorder. These screening algorithms
@@ -87,37 +103,36 @@ mean of the three resulting biomarker measurements (Figure
 screening result, reducing the chance that a sample will be deemed
 screen negative due to analytical imprecision.
 
-Threshold values used in newborn screening are set based on the
-distribution of the biomarker: in the healthy population, the affected
-population and specific sub-populations based on demographics such as
-age, gestational age and birth weight. The goal of the laboratory is
-to identify samples with abnormal biomarker results relative to these
-screening thresholds. When the same assay is used in both the initial
-and confirmatory phases of screening the imprecision of the assay at
-the confirmatory threshold is useful in determining an appropriate
-initial threshold (Figure [[fig:algorithm]]). The probability that a
+Confirmatory threshold values used in newborn screening are set based
+on the distribution of the biomarker: in the healthy population, the
+affected population and specific sub-populations based on demographics
+such as age, gestational age and birth weight. The goal of the
+laboratory is to identify samples with abnormal biomarker results
+relative to these confirmatory thresholds. When the same assay is used
+in both the initial and confirmatory phases of screening the
+imprecision of the assay at the confirmatory threshold is useful in
+determining an appropriate initial threshold. The probability that a
 laboratory will incorrectly assign a screen negative determination due
 to analytical imprecision can be estimated from the probability of a
-result near the threshold the imprecision of the method at the
-screening threshold. This approach will be illustrated using the
-example of newborn screening for classic galactosemia
-[cite:@Schweitzer1995].
+result near the initial threshold and the imprecision of the method at
+the confirmation threshold. This approach will be illustrated for
+newborn screening for classic galactosemia [cite:@Schweitzer1995].
 
 In Ontario, Canada newborn screening for classic galactosemia is based
 on measurement of galactose-1-phosphate uridylyltransferase (GALT)
 activity in dried blood spots [cite:@Beutler1991]. All samples are
-tested for GALT activity, this is repeated in duplicate for all
-samples with activity below the initial threshold. The mean of the
-three results is then assessed againset the confirmation threshold to
-determine if the newborn is screen positive or negative for classic
-galactosemia. The classic galactosemia screening process will be used
-to demonstrate an approach for establishing initial thresholds in a
-multi-stage testing algorithm based on biomarker distribution in a
-population and analytical imprecision at the confirmation
-threshold. While newborn screening is being used to demonstrate this
-approach it is applicable to many testing scenarios in which biomarker
-results in a grey zone must be identified for further investigation.
-
+tested for GALT activity, this is repeated in duplicate for samples
+with activity below the initial threshold (Figure [[fig:algorithm]]). The
+mean of the three results is then assessed against the confirmation
+threshold to determine if the newborn is screen positive or negative
+for classic galactosemia. The classic galactosemia screening process
+will be used to demonstrate an approach for establishing initial
+thresholds in a multi-stage testing algorithm based on biomarker
+distribution in a population and analytical imprecision at the
+confirmation threshold. While newborn screening is being used to
+demonstrate this approach it is applicable to many testing scenarios
+in which biomarker results in a grey zone must be identified for
+further investigation.
 
 #+BEGIN_SRC dot :file ./figures/algorithm.pdf :cmdline -Kdot -Tpdf
     digraph {
@@ -137,7 +152,7 @@ results in a grey zone must be identified for further investigation.
   }
 #+END_SRC
 
-#+CAPTION[]: Simplified Screening Algorithm for a Disorder that Results in Low Biomarker Measurements. 
+#+CAPTION[]: Simplified Screening Algorithm for a Disorder such as Classic Galactosemia in which Biomarker Measurements are Low. 
 #+NAME: fig:algorithm
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
@@ -145,7 +160,7 @@ results in a grey zone must be identified for further investigation.
 
 \clearpage
 
-* STARTED Material and Methods
+* Material and Methods
 ** GALT Activity Data 
 The laboratory information system was queried for all newborn
 screening GALT activity results from the first phase of screening in
@@ -159,34 +174,34 @@ activity was reported in units per gram of hemoglobin (U/g Hb). 903
 filter paper was used for dried blood spot sample collection (EBF,
 South Carolina, USA).
 
-** Assay Impression at Screening Threshold
+** TODO Assay Impression at Screening Threshold
 The standard deviation of the GALT activity assay at the confirmation
-threshold (1.5 U/g Hg) was determined based on six months of quality
+threshold (1.5 U/g Hg) was estimated based on six months of quality
 control (QC) data for a QC material with mean GALT activity of 1.6 U/g
-Hg.  *How many data points in six months of QC data*
+Hg (n = *How many data points in six months of QC data*)
 
 ** Simulation
-The distribution of GALT activity results and the imprecision at the
-screening threshold were used to estimate the number of samples
-potentially affected by measurement imprecision near the screening
-threshold. Analytical imprecision at the screening threshold was
-modelled using a standardized normal distribution with mean (\mu)
-equal to the confirmation threshold, and the standard deviation
-(\sigma) of quality control results at the screening threshold
-(Equation \ref{eq:error}) The probability that a measured GALT
-activity result X could arise when the true value is at the
-confirmation threshold can be determined from the height (Ye) of the
-probability distribution at X (Ye_x). The distribution of GALT
-activity in the population was used to determine the probability of a
-GALT activity of X in the population. Similarly the probability of
-GALT activity X in the population can be determined from the height
-(Yp) of this probability distribution at X (Yp_x). The joint
-probability (Ye \cdot Yp) of the above conditions provides an estimate
-of probability of a false negative result do to analytical imprecision
-for GALT result X. The joint probabilities were then summed over a
-given range to determine the probability of a false negative result do
-to analytical imprecision for a range of GALT results (Equation
-\ref{eq:joint}).
+The population distribution of GALT activity results and the
+imprecision at the confirmatory threshold were used to estimate the
+number of potentially false negative samples due measurement
+imprecision near the confirmation threshold. Analytical imprecision at
+the confirmation threshold was modelled using a standardized normal
+distribution with mean (\mu) equal to the confirmation threshold, and
+the standard deviation (\sigma) of quality control results near the
+confirmation threshold. The probability that a measured GALT activity
+result x could arise when the true value is equal to the confirmation
+threshold can be determined from the height of the probability
+distribution for analytical imprecision at x (Ye_x). The distribution
+of GALT activity in the population was used to determine the
+probability of a GALT activity of x in the population. Similarly the
+probability of GALT activity x in the population can be determined
+from the height of this probability distribution at X (Yp_x). The
+joint probability (Ye_x \cdot Yp_x) of the above conditions provides
+an estimate of probability of a false negative result do to analytical
+imprecision for GALT result x. The joint probabilities were then
+summed over a given range to determine the probability of a false
+negative result do to analytical imprecision for a range of GALT
+results (Equation \ref{eq:joint}).
 
 
 #+BEGIN_EXPORT LaTeX
@@ -197,19 +212,20 @@ p = \sum_{x=a}^b Ye_x \cdot Yp_x \cdot dx
 
 A simulation was used to examine multiple initial screening thresholds
 where each initial threshold (I) is the confirmation threshold (C)
-plus K number of standard deviation for K from 0 to 6 (Equation
-\ref{eq:initial}). For each value of K the predicted annual number of
+plus k number of standard deviation, for k from 0 to 6 (Equation
+\ref{eq:initial}). For each value of k the predicted annual number of
 samples in grey zone between the confirm and initial threshold was
 estimated by the area in this region of the probability density
 function of GALT activity in the population using the numerical
 integration (Equation \ref{eq:grey}). The number GALT results above
 initial threshold and potentially affected by analytical imprecision
-was estimated using the same approach for the joint probabilities (Ye
-\cdot Yp) discussed above (Equation \ref{eq:imprecision}).
+was estimated using the joint probabilities (Ye_x \cdot Yp_x) summed from
+the initial threshold to 7 standard deviations from the confirmation
+threshold (Equation \ref{eq:imprecision}).
 
 #+BEGIN_EXPORT LaTeX
 \begin{equation}\label{eq:initial}
-I = C + K\sigma 
+I = C + k\sigma 
 \end{equation}
 #+END_EXPORT
 
@@ -221,18 +237,9 @@ I = C + K\sigma
 
 #+BEGIN_EXPORT LaTeX
 \begin{equation}\label{eq:imprecision}
-\text{imprecision zone samples}  =  n \cdot \sum_{x=initial}^b Ye_x \cdot Yp_x \cdot dx
+\text{imprecision zone samples}  =  n \cdot \sum_{x=initial}^{7\sigma} Ye_x \cdot Yp_x \cdot dx
 \end{equation}
 #+END_EXPORT
-
-imprecision resulting value X when the true value is the confirmation
-the area under the probability density function of measurement error
-after scaling for the probability of a result at the confirmation
-threshold in the population (Equation \ref{eq:scaled}). For each
-value of K used to set an initial threshold (Equation
-\ref{eq:initial}) the number of samples predicted to be affected by
-measurement imprecision and not included in the grey zone was
-determined.
 
 ** Software
 The manuscript was prepared using the Org-mode environment for
@@ -241,11 +248,11 @@ literate programming and reproducible research
 for all data analysis with RODBC for relational database access,
 tidyverse packages for data manipulation, lubridate for dates and
 times and xtable for exporting tables to
-\LaTeX [cite:@R2020;@rodbc;@tidyverse;@lubridate;@xtable]. R scripts
+\LaTeX  [cite:@R2020;@rodbc;@tidyverse;@lubridate;@xtable]. R scripts
 used for data analysis are available here:
 https://github.com/hendersonmpa/imprecision_logic_manuscript.git
 
-* STARTED Results
+* Results
 
 Two considerations when determining the threshold value used in the
 initial phase of a two step screening algorithm (Figure [[fig:algorithm]])
@@ -256,115 +263,109 @@ confirmation thresholds and all samples with GALT activity in this
 range are repeated in duplicate in the second phase of screening
 (Figure [[fig:algorithm]] and [[fig:imprecision]]). The "imprecision zone" is
 the region outside the "grey zone" but within the distribution of
-analytical imprecision at the screening threshold (Figure
-[[fig:imprecision]], gold area). All GALT results above the initial
-threshold are potentially false negative however the probability that
-the result is falsely negative do to analytical imprecision is
-determined by the analytical imprecision at the confirmation threshold
-and how far the result is from the confirmation threshold.
+analytical imprecision at the confirmation threshold (7\sigma above
+the confirmation threshold) (Figure [[fig:imprecision]], gold area). The
+probability that the result is falsely negative do to analytical
+imprecision is determined by the analytical imprecision at the
+confirmation threshold and how far the result is from the confirmation
+threshold.
 
 A simulation was run to determine the number of samples that would
-fall in the "grey zone" and require repeat testing and those that in
-the "imprecision zone" as a function of the GALT activity threshold
-used in the initial phase of screening (Table
-\ref{tab:imprecision}). There is a trade-off between the number of
-samples that require repeat testing and the number that could be false
-negative due to analytical imprecision. In newborn screening the
-tolerance for a false negative first tier screening result is very
-low, therefore, the most appropriate expansion factor should be
-applied to avoid this possibility. There is also a cost involved in
-repeat testing and the possibility that there is not adequate sample
-which would prompt recollection. Table \ref{tab:imprecision} shows the
-estimated number of samples in the "grey-zone" and "imprecsion zone"
-annually for a set of initial thresholds. For example, an initial
-threshold 1 standard deviation from the confirmation threshold (GALT
-acitivty = 1.70 U/g Hb) would result in \sim 10 samples in the grey
-zone (Figure [[fig:imprecision]] grey region) annually with \sim 15
-samples in the "imprecision zone" (Figure [[fig:imprecision]], red
-region). In contrast an initial threshold 6 standard deviations the
-confirmation threshold (GALT acitivty = 2.70 U/g Hb) from would result
-in \sim 222 samples in the grey zone annually with close to zero samples in the
-"imprecision zone".
+fall in the "grey zone" and in the "imprecision zone" as a function of
+the GALT activity threshold used in the initial phase of screening
+(Table \ref{tab:imprecision}). There is a trade-off between the number
+of samples that require repeat testing and the number that could be
+false negative due to analytical imprecision. Table
+\ref{tab:imprecision} shows the estimated number of samples in the
+"grey-zone" and "imprecision zone" annually for a set of initial
+thresholds. For example, an initial threshold 1 standard deviation
+from the confirmation threshold (GALT acitivty = 1.70 U/g Hb) would
+result in \sim 10 samples in the grey zone (Figure [[fig:imprecision]]
+grey region) annually with \sim 15 samples in the "imprecision zone"
+(Figure [[fig:imprecision]], gold region). In contrast an initial
+threshold 6 standard deviations from the confirmation threshold (GALT
+activity = 2.70 U/g Hb) from would result in \sim 222 samples in the
+grey zone annually with essentially zero samples in the "imprecision
+zone".
 
 #+begin_src R :session *R* :results values :exports none :tangle yes
-     library("tidyverse")
-     library("lubridate")
-   #  library("readxl")
-     library("RODBC")
-     library("xtable")
-     options(warn=-1) ## options(warn=0) to turn back on
-     ## Suppress summarise info
-     today <- as.Date(now())
-     source("credentials.r")
+       library("tidyverse")
+       library("lubridate")
+     #  library("readxl")
+       library("RODBC")
+       library("xtable")
+       options(warn=-1) ## options(warn=0) to turn back on
+       ## Suppress summarise info
+       today <- as.Date(now())
+       source("credentials.r")
 
-     ## rescale a vector from 0 to 1
-     rescale <- function(x){
-       (x-min(x))/(max(x)-min(x))
-     }
+       ## rescale a vector from 0 to 1
+       rescale <- function(x){
+	 (x-min(x))/(max(x)-min(x))
+       }
 
-     '%!in%' <- function(x,y)!('%in%'(x,y))
+       '%!in%' <- function(x,y)!('%in%'(x,y))
 
-     ### accept data, initial and confirm thresholds
-     ### return the area of the probability density polygon 
-     densprob <- function(dens, lower, upper) {
+       ### accept data, initial and confirm thresholds
+       ### return the area of the probability density polygon 
+       densprob <- function(dens, lower, upper) {
+	 x <- dens$x
+	 y <- dens$y
+	 dx <- x[2] - x[1] ## determine the increment
+	 C <- sum(y) * dx ## total area should be very close to 1
+	 p.unscaled <- sum(y[x >= lower & x <= upper]) * dx 
+	 round(p.unscaled/C, digits = 5) ## scaled probablity
+       }
+
+
+     ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each y from the initial threshold to 6 SD
+     jointprob  <- function(pop_data, confirm, lower, upper) {
+       dens <- density(pop_data)
        x <- dens$x
        y <- dens$y
        dx <- x[2] - x[1] ## determine the increment
-       C <- sum(y) * dx ## total area should be very close to 1
-       p.unscaled <- sum(y[x >= lower & x <= upper]) * dx 
-       round(p.unscaled/C, digits = 5) ## scaled probablity
-     }
+       pop_dens_region <- y[x >= lower & x <= upper] ##trim the pop dens to the region of interest
 
-
-   ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each y from the initial threshold to 6 SD
-   jointprob  <- function(pop_data, confirm, lower, upper) {
-     pop_dens <- density(galtfilter$result)
-     x <- dens$x
-     y <- dens$y
-     dx <- x[2] - x[1] ## determine the increment
-     pop_dens_region <- y[x >= lower & x <= upper] ##trim the pop dens to the region of interest
-
-     ## create the imprecision region
-     x2 <- seq(start,stop,dx)
-     y2 <- dnorm(x2,confirm,sd)
-     imp_dens_region <- y2[x2 >= lower & x2 <= upper] ##trim the imprecision dens to the region of interest
-     #Create a dataframe with the Ys from both densities side by side
-     sum(pop_dens_region * imp_dens_region) * dx
-     }
-
-  ## Testing
-  ## jointprob(galtfilter$result, 1.7, 3.2)
-#  jointprob(galtfilter$result, 1.5, 2.7, 3.2)
- # jointprob(galtfilter$result, 1.5, 1.5, 3.2)
-
-  ## accept data, confirmation threshold, sd at the threshold, factor expansion factor
-     ## return factor, lower, upper, grey area samples, uncertain area samples
-
-  denssamples <- function(data, confirm, sd, factor , direction = "left", samples = 145000) {
-       dens <- density(data)
-       umsd  <- factor * sd
-       sevensd  <- 7 * sd
-       if (direction == "left") {
-	 ## initial threshold based on the sd and factor
-	 initial <- confirm + umsd
-	 end <- confirm + sevensd
-	 ## grey area between the confirm and initial thresholds
-	 grey_area <- densprob(dens, confirm, initial)
-	 ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each value from the initial threshold to 6 SD
-	 imprecision_area <- jointprob(data, confirm, initial, end)
-
-       } else {
-	 ## right sided threshold
-	 print("Right sided thresholds not implemented")
+       ## create the imprecision region
+       x2 <- seq(start,stop,dx)
+       y2 <- dnorm(x2,confirm,sd)
+       imp_dens_region <- y2[x2 >= lower & x2 <= upper] ##trim the imprecision dens to the region of interest
+       #Create a dataframe with the Ys from both densities side by side
+       sum(pop_dens_region * imp_dens_region) * dx
        }
-       ## area of the probability density polygon between the initial and 6 sd above
-       grey_samples <- grey_area * samples
-       imprecision_samples <- imprecision_area * samples
-       list(factor, initial, grey_samples, imprecision_samples)
-   }
 
-  ## Testing
-  ##  denssamples(galtfilter$result, 1.5, 0.2, 1, direction = "left")
+    ## Testing
+  ## jointprob(galtfilter$result, 1.5, 2.7, 3.2)
+  ## jointprob(galtfilter$result, 1.5, 1.5, 3.2)
+
+    ## accept data, confirmation threshold, sd at the threshold, factor expansion factor
+       ## return factor, lower, upper, grey area samples, uncertain area samples
+
+    denssamples <- function(data, confirm, sd, factor , direction = "left", samples = 145000) {
+	 dens <- density(data)
+	 umsd  <- factor * sd
+	 sevensd  <- 7 * sd
+	 if (direction == "left") {
+	   ## initial threshold based on the sd and factor
+	   initial <- confirm + umsd
+	   end <- confirm + sevensd
+	   ## grey area between the confirm and initial thresholds
+	   grey_area <- densprob(dens, confirm, initial)
+	   ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each value from the initial threshold to 6 SD
+	   imprecision_area <- jointprob(data, confirm, initial, end)
+
+	 } else {
+	   ## right sided threshold
+	   print("Right sided thresholds not implemented")
+	 }
+	 ## area of the probability density polygon between the initial and 6 sd above
+	 grey_samples <- grey_area * samples
+	 imprecision_samples <- imprecision_area * samples
+	 list(factor, initial, grey_samples, imprecision_samples)
+     }
+
+    ## Testing
+    ##  denssamples(galtfilter$result, 1.5, 0.2, 1, direction = "left")
 
     #+end_src
 
@@ -447,20 +448,21 @@ in \sim 222 samples in the grey zone annually with close to zero samples in the
     #samples <- round(area *145000, digits = 0)
     #text(x = 0.55, y = 0.004, label= paste("Annual results in red area:",samples), side = 3)
 
-    abline(v = confirm, col = "black" , lty = 1, lwd = 3)
-    abline(v = initial, col = "black", lty = 2, lwd = 3)
+    abline(v = confirm, col = "black" , lty = 1, lwd = 2)
+    abline(v = initial, col = "black", lty = 2, lwd = 2)
     #abline(v = confirm + (1*sd), col = "black", lty = 2, lwd = 2) 
 
     legend("topleft",
 	   legend = c("positive", "grey zone", "imprecision zone", "negative", 
 		       "analytical imprecision","confirmation threshold",
-		      expression(paste("1", sigma, " threshold"))),
+		      "initial threshold"),
 	   col = c("black", "grey75", "goldenrod", "steelblue" , "red", "black", "black"),
-	   lty = c(NA, NA, NA, NA, NA, "solid", "dashed"),
-	   pch = c(15, 15, 15, 15, 15, NA, NA))
+	   lty = c(NA, NA, NA, NA, "solid", "solid", "dashed"),
+	   lwd = c(NA, NA, NA, NA, 2, 2, 2),
+	   pch = c(15, 15, 15, 15, NA , NA, NA))
 #+end_src
 
-#+CAPTION[]: The left side of the GALT activity population distribution, illustrating the imprecsion at the confirmation threshold. 
+#+CAPTION[]: The low end of the GALT activity population distribution. Results above the initial threshold (dashed black line) are screen negative, however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecsion (red distribution and region) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.
 #+NAME: fig:imprecision
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
@@ -478,24 +480,24 @@ in \sim 222 samples in the grey zone annually with close to zero samples in the
     galtarea[i+1,] <- denssamples(galtfilter$result, 1.5, 0.2, i, direction = "left")
   }
 
-  galtarea %>% rename("Expansion Factor" = factor,
+  galtarea %>% rename("Standard Deviations" = factor,
 		      "Initial Threshold" = initial,
 		      "Grey Zone" = grey,
 		      "Imprecision Zone" =  imprecision) %>%
-    xtable(caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding expansion factor using (Equation \ref{eq:initial})",
+    xtable(caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations",
 	    label = "tab:imprecision", display = c("d", "d", "f", "f", "g")) %>%
 	    print(include.rownames = FALSE)
-    #+end_src
+#+end_src
 
 #+RESULTS:
 #+begin_export latex
 % latex table generated in R 4.0.3 by xtable 1.8-4 package
-% Wed May 25 17:35:57 2022
+% Fri May 27 14:48:48 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
-Expansion Factor & Initial Threshold & Grey Zone & Imprecision Zone \\ 
+Standard Deviations & Initial Threshold & Grey Zone & Imprecision Zone \\ 
   \hline
   0 & 1.50 & 0.00 &  76 \\ 
     1 & 1.70 & 10.15 &  15 \\ 
@@ -506,40 +508,46 @@ Expansion Factor & Initial Threshold & Grey Zone & Imprecision Zone \\
     6 & 2.70 & 221.85 & 4.9e-07 \\ 
    \hline
 \end{tabular}
-\caption{Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding expansion factor using (Equation ef{eq:initial})} 
+\caption{Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations using (Equation ef{eq:initial})} 
 \label{tab:imprecision}
 \end{table}
 #+end_export
 
 \clearpage
 
-* STARTED Discussion
+* Discussion
 
-We have used a newborn screening algorithm for galactosemia to
+We have used a newborn screening algorithm for classic galactosemia to
 demonstrate how data on analytical imprecision and biomarker
-distribution in a population and can be inform decisions on screening
+distribution in a population and can inform decisions on screening
 thresholds. The ideas discussed here are second nature to the clinical
 laboratory professional; there is analytical imprecision in all
 laboratory results and results at the extremes of the population
 distribution are rare. The utility of this approach is in combining
 analytical and population information to get an estimate of the number
-of false negative results and the number of samples sent for
-confirmatory testing for threshold value, this could be a screening
-threshold or a diagnostic threshold. These estimates could be used to
-decided on appropriate initial phase thresholds and plan for the
-number of samples expected to require more expensive and labour
-intensive confirmatory testing.
+of possible false negative results and the number of samples sent for
+confirmatory testing for a given threshold value, this could be a
+screening threshold or a diagnostic threshold. These estimates could
+be used to decided on appropriate initial phase thresholds and plan
+for the number of samples expected to require more expensive and
+labour intensive confirmatory testing.In newborn screening the
+tolerance for a false negative first tier screening result is very
+low, therefore, the most appropriate expansion factor should be
+applied to avoid this possibility. There is also a cost involved in
+repeat testing and the possibility that there is not adequate sample
+which would prompt recollection.
 
 While a newborn screening scenario was used to demonstrate this
 approach it is applicable to any area of laboratory medicine where a
 sensitive test is used to identify samples that require additional
 investigation with a more complex and informative method. Examples
 from other areas of laboratory medicine include but are by no means
-limited to confirmation of hepatitis B serology results,
-spectrophotometric measurement of total urine porphyrins to identify
-samples that require chromatographic fractionation of urine
-porphyrins, confirmation of low point of care glucose results by the
-central laboratory [cite:@Chen2006;@Deacon2001e;@Lum1996].
+limited to confirmation of hepatitis B serology results with a
+antibody neutralization assay, spectrophotometric measurement of total
+urine porphyrins to identify samples that require chromatographic
+fractionation of urine porphyrins, confirmation of low point of care
+glucose results by the central laboratory
+[cite:@Chen2006;@Deacon2001e;@Lum1996].
 
 The approach outlined here has focused exclusively on the impact of
 method precision on a two phase testing process. Analytical bias and
@@ -548,7 +556,7 @@ incorporated into the estimate of error at a threshold value however
 this approach could be extended to incorporate total uncertainty of
 measurement [cite:@White2004].
 
-* DONE Acknowledgments
+* Acknowledgments
 Funding: None.
 * References
 #+print_bibliography:
