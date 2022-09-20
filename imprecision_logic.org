@@ -307,6 +307,7 @@ Funding: None.
        library("RODBC")
        library("xtable")
   library("pander")
+  library("scales")
        options(warn=-1) ## options(warn=0) to turn back on
        ## Suppress summarise info
        today <- as.Date(now())
@@ -332,14 +333,16 @@ Funding: None.
 
 
      ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each y from the initial threshold to 6 SD
-     jointprob  <- function(pop_data, confirm, lower, upper) {
-       dens <- density(pop_data)
+     jointprob  <- function(dens, confirm, sd, lower, upper) {
+       #dens <- density(pop_data)
        x <- dens$x
        y <- dens$y
        dx <- x[2] - x[1] ## determine the increment
        pop_dens_region <- y[x >= lower & x <= upper] ##trim the pop dens to the region of interest
 
        ## create the imprecision region
+       start <- confirm - (6*sd)
+       stop <- confirm + (6*sd)
        x2 <- seq(start,stop,dx)
        y2 <- dnorm(x2,confirm,sd)
        imp_dens_region <- y2[x2 >= lower & x2 <= upper] ##trim the imprecision dens to the region of interest
@@ -354,8 +357,8 @@ Funding: None.
     ## accept data, confirmation threshold, sd at the threshold, factor expansion factor
        ## return factor, lower, upper, grey area samples, uncertain area samples
 
-    denssamples <- function(data, confirm, sd, factor , direction = "left", samples = 145000) {
-	 dens <- density(data)
+    denssamples <- function(dens, confirm, sd, factor , direction = "left", samples = 145000) {
+	 #dens <- density(data)
 	 umsd  <- factor * sd
 	 sevensd  <- 7 * sd
 	 if (direction == "left") {
@@ -365,7 +368,7 @@ Funding: None.
 	   ## grey area between the confirm and initial thresholds
 	   grey_area <- densprob(dens, confirm, initial)
 	   ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each value from the initial threshold to 6 SD
-	   imprecision_area <- jointprob(data, confirm, initial, end)
+	   imprecision_area <- jointprob(dens, confirm, sd, initial, end)
 
 	 } else {
 	   ## right sided threshold
@@ -381,6 +384,9 @@ Funding: None.
     ##  denssamples(galtfilter$result, 1.5, 0.2, 1, direction = "left")
 
     #+end_src
+
+    #+RESULTS:
+
 #+begin_src R :session *R* :results values :exports none :tangle yes :cache no
   galtquery <- "select s.spcextcode1 as accession,
 	   a.ansTimeMeasured as measured_time,
@@ -413,52 +419,72 @@ Funding: None.
     #filter(measured_time >= ymd_hms("2018-06-11 00:00:00") & !result_code %in% c("GALT-C-01-100", "GALT-C-01-001", "GALT-C-01-012")) ## initial result only
 #+end_src
 
+#+RESULTS:
 
-#+begin_src R :session *R* :results output latex :exports results :tangle yes
+#+begin_src R :session *R* :results values :exports none :tangle yes
+  annual_volume <- 145000
+  start <- 0
+  end <- 6
+  mean <- 1.5
+  sd <- 0.2
+
   ## initialize the dataframe
   galtarea <- data.frame(factor = double(), initial = double(),
 			 grey = double(), imprecision = double(),
 			 stringsAsFactors = FALSE)
 
-	  ## populate the dataframe
-  for (i in 0:6) {
-    galtarea[i+1,] <- denssamples(galtfilter$result, 1.5, 0.2, i, direction = "left")
-xo  }
-
-  galtarea %>% rename("Standard Deviations" = factor,
-		      "Initial Threshold" = initial,
-		      "Grey Zone" = grey,
-		      "Imprecision Zone" =  imprecision) %>%
-      xtable(caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations",
-	    label = "tab:imprecision", display = c("d", "d", "f", "f", "g")) %>%
-	    print(include.rownames = FALSE)
-
-    #pandoc.table(style = "rmarkdown", caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations")
+  ## stochastic simulation
+  c <- 0
+  for (s in 1:1000) {
+    data_sample <- sample(galtfilter$result, size = annual_volume, replace = TRUE)
+    d <- density(data_sample)
+    for (i in seq(from = start, to = end, by = 1)) {
+      c <- c + 1
+      galtarea[c,] <- denssamples(d, confirm = 1.5, sd = 0.2, factor = i)
+      # denssamples(d, confirm = 1.5, sd = 0.2, factor = i)
+    }
+  }
 
 #+end_src
 
 #+RESULTS:
+
+#+begin_src R :session *R* :results output latex :exports results :tangle yes
+  galtarea %>%
+    group_by(factor, initial) %>%
+    summarise(grey_p025 = quantile(grey,probs = c(0.025), type = 8, na.rm = TRUE),
+	      grey_median = median(grey, na.rm = TRUE),
+	      grey_p975 = quantile(grey,probs = c(0.975), type = 8, na.rm = TRUE),
+	      imp_p025 = quantile(imprecision,probs = c(0.025), type = 8, na.rm = TRUE),
+	      imp_median = median(imprecision, na.rm = TRUE),
+	      imp_p975 = quantile(imprecision,probs = c(0.975), type = 8, na.rm = TRUE)) %>%
+    ## rename("Standard Deviations" = factor,
+    ##       	    "Initial Threshold" = initial,
+    ##       	    "Grey Zone" = grey,
+    ##       	    "Imprecision Zone" =  imprecision) %>%
+    xtable(caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations",
+	   label = "tab:imprecision", display = c("d", "d", "f","f", "f", "f", "g", "g","g")) %>%
+    print(include.rownames = FALSE)
+
+  ##pandoc.table(style = "rmarkdown", caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations")
+
+
+#+end_src
+
+
+#+RESULTS:
 #+begin_export latex
-% latex table generated in R 4.0.3 by xtable 1.8-4 package
-% Tue Jun  7 09:40:01 2022
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrr}
-  \hline
-Standard Deviations & Initial Threshold & Grey Zone & Imprecision Zone \\ 
-  \hline
-  0 & 1.50 & 0.00 &  76 \\ 
-    1 & 1.70 & 10.15 &  15 \\ 
-    2 & 1.90 & 23.20 &   8 \\ 
-    3 & 2.10 & 49.30 & 0.51 \\ 
-    4 & 2.30 & 92.80 & 0.011 \\ 
-    5 & 2.50 & 142.10 & 0.0002 \\ 
-    6 & 2.70 & 221.85 & 4.9e-07 \\ 
-   \hline
-\end{tabular}
-\caption{Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations} 
-\label{tab:imprecision}
-\end{table}
+Error: unexpected symbol in:
+"for (s in 1:1000) {
+  data_sample <- sample(galtfilter$result, size = annual_volume, replace = TRUE)o"
+Error: unexpected '}' in "}"
+[1m[33mError[39m in [1m[1m`summarise()`:[22m
+[1m[22m[33m![39m Problem while computing `imp_p975 = quantile(imprecsion, probs = c(0.975), type = 8, na.rm =
+  TRUE)`.
+[36mℹ[39m The error occurred in group 1: factor = 0.
+[1mCaused by error in [1m[1m`quantile()`:[22m
+[33m![39m object 'imprecsion' not found
+[90mRun `rlang::last_error()` to see where the error occurred.[39m
 #+end_export
 
 \clearpage
@@ -468,7 +494,7 @@ Standard Deviations & Initial Threshold & Grey Zone & Imprecision Zone \\
 #+begin_src R :session *R* :results output graphics file :file ./figures/galtthresholds.pdf :exports results :tangle yes
     dens <- density(galtfilter$result)
     sd <- 0.2 ##SD at postive confirm
-    confirm  <- 2.0
+    confirm  <- 1.5
     initial <- confirm + (1.1*sd)
     theight  <- max(dens$y[which(dens$x <= confirm)])
     bheight  <- max(dens$y[which(dens$x <= initial)])
@@ -529,6 +555,69 @@ Standard Deviations & Initial Threshold & Grey Zone & Imprecision Zone \\
 [[file:./figures/galtthresholds.pdf]]
 
 \clearpage
+
+#+begin_src R :session *R* :results output graphics file :file ./figures/galtthresholdsv2.pdf :exports results :tangle yes
+  dens <- density(galtfilter$result)
+  sd <- 0.2 ##SD at postive confirm
+  confirm  <- 1.5
+  initial <- confirm + (1.1*sd)
+  theight  <- max(dens$y[which(dens$x <= confirm)])
+  bheight  <- max(dens$y[which(dens$x <= initial)])
+  ## defining the region of FN uncertainty
+  start <- confirm - (6*sd)
+  stop <- confirm + (6*sd)
+  x2 <- seq(start,stop,0.01)
+					  #y2 <- theight*rescale(dnorm(x2,confirm,sd))
+  y2 <- dnorm(x2,confirm,sd)
+
+  ## create indices for half of the UM distribution
+  halfx2 <- seq(confirm,stop,0.01)
+  halfy2 <- y2[length(halfx2):length(x2)]
+  fnx2 <- seq(initial,stop,0.01)
+  fny2 <- y2[(length(x2) - length(fnx2)):(length(x2) -1)]
+
+  plot(dens,type = "n", main = "",
+       xlim = c(0,5),
+       ylim = c(0,0.04),
+					  #x= 0:10*confirm, y = 0:10*bheight, 
+       xlab = "GALT Activity U/g Hb",
+       ylab = "Probability Density")
+  red50 <- alpha("red", 0.5)
+  ### polygons
+  ## measurement error distribution
+  polygon(x2,y2,type="l",col=red50, border = "red")
+  polygon(dens,col = "steelblue", border = "steelblue")
+  ## imprecision zome
+					  # purple50 <- adjustcolor("purple", alpha.f = 0.25)
+  with(dens, polygon(x=c(stop, stop, x[x < stop]), y=c(0, y[x=stop], y[x < stop]), col="goldenrod", border = "goldenrod"))
+  ## grey zone
+  with(dens, polygon(x=c(initial, initial, x[x < initial]), y=c(0, y[x=initial], y[x < initial]), col="grey75", border = "grey75"))
+  ## positive
+  with(dens, polygon(x=c(confirm, confirm, x[x < confirm]), y=c(0, y[x=confirm], y[x < confirm]), col="black", border = "black"))
+  points(x2,y2,type="l",col="red", lwd = 2) ## region of uncertainty of measurment
+
+
+
+  ##polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col= alpha("red", 0.5))
+  #fnzeros <- rep(0,length(fnx2)) # create a vector of zeros
+  #polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col= alpha("red", 0.5))
+					  # thresholds
+  abline(v = confirm, col = "black" , lty = 1, lwd = 2)
+  abline(v = initial, col = "black", lty = 2, lwd = 2)
+  legend("topright", inset = 0.02,
+	 legend = c("positive", "grey zone", "imprecision zone", "negative", 
+		    "analytical imprecision","confirmation threshold",
+		    "initial threshold"),
+	 col = c("black", "grey75", "goldenrod", "steelblue" , red50, "black", "black"),
+	 lty = c(NA, NA, NA, NA, NA, "solid", "dashed"),
+	 lwd = c(NA, NA, NA, NA, NA, 2, 2),
+	 pch = c(15, 15, 15, 15, 15 , NA, NA),
+	 bg = "white", 
+	 box.lty = 0)
+#+end_src
+
+#+RESULTS:
+[[file:./figures/galtthresholdsv2.pdf]]
 
 * Supplementary Data
 
