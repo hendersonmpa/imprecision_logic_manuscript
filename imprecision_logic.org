@@ -423,7 +423,7 @@ Funding: None.
 	  ## populate the dataframe
   for (i in 0:6) {
     galtarea[i+1,] <- denssamples(galtfilter$result, 1.5, 0.2, i, direction = "left")
-  }
+xo  }
 
   galtarea %>% rename("Standard Deviations" = factor,
 		      "Initial Threshold" = initial,
@@ -522,7 +522,7 @@ Standard Deviations & Initial Threshold & Grey Zone & Imprecision Zone \\
 	   pch = c(15, 15, 15, 15, NA , NA, NA))
 #+end_src
 
-#+CAPTION[]: The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecsion (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.
+#+CAPTION[]: The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.
 #+NAME: fig:imprecision
 #+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
