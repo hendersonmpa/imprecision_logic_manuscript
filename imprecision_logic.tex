@@ -1,4 +1,4 @@
-% Created 2022-09-20 Tue 17:39
+% Created 2022-09-22 Thu 12:05
 % Intended LaTeX compiler: pdflatex
 \documentclass[review]{elsarticle}
 \usepackage[utf8]{inputenc}
@@ -25,7 +25,6 @@
 \usepackage{chemfig}
 \setchemfig{atom style={scale=0.45}}
 \usepackage[]{mhchem}
-\usetheme{default}
 \date{}
 \title{}
 \hypersetup{
@@ -59,7 +58,7 @@
 \end{frontmatter}
 
 \section*{Abstract}
-\label{sec:orga96a91d}
+\label{sec:org159a263}
 \begin{description}
 \item[{Background}] A common approach in laboratory medicine is to use a
 simple but sensitive test to screen samples to identify those that
@@ -87,7 +86,7 @@ analytical imprecision.
 \end{description}
 
 \section*{Impact Statement}
-\label{sec:org03a1348}
+\label{sec:org7970489}
 It is common in laboratory medicine to use a simple but sensitive
 test to screen samples for additional investigation with a more
 complex and informative method. The choice of screening threshold
@@ -98,7 +97,7 @@ the tested population and analytical imprecision of the method can
 be used to estimate the impact of a chosen screening threshold.
 
 \section*{Introduction}
-\label{sec:org2ae3058}
+\label{sec:orge9f992c}
 Newborn screening commonly uses algorithms based on biomarkers
 measured in dried blood spot samples to identify neonates with an
 increased probability of a target disorder. These screening algorithms
@@ -112,7 +111,7 @@ a different biomarker(s) is employed in the confirmatory phase of
 testing, however in a number of disorders the same assay is applied in
 duplicate with a more specific confirmation threshold applied to the
 mean of the three resulting biomarker measurements (Supplementary Figure
-\ref{fig:org82877b6}). This approach improves the precision of the final
+\ref{fig:org0182d84}). This approach improves the precision of the final
 screening result, reducing the chance that a sample will be deemed
 screen negative due to analytical imprecision.
 
@@ -136,8 +135,9 @@ scenarios in which biomarker results in a grey zone must be identified
 for further investigation.
 
 \section*{Materials and Methods}
-\label{sec:org4f0d745}
-\begin{frame}[label={sec:orgadcc720}]{GALT Activity Data}
+\label{sec:orgf3cca20}
+\subsection*{GALT Activity Data}
+\label{sec:org137679d}
 The laboratory information system was queried for all newborn
 screening GALT activity results from the first phase of screening in
 the period 2017-01-01 to 2018-12-31 (n = 285,875). This data was used
@@ -149,16 +149,16 @@ on the SpotCheck Pro platform (Astoria Pacific, Oregon USA.). GALT
 activity was reported in units per gram of hemoglobin (U/g Hb). 903
 filter paper was used for dried blood spot sample collection (EBF,
 South Carolina, USA).
-\end{frame}
 
-\begin{frame}[label={sec:org9983c85}]{Assay Imprecision}
+\subsection*{Assay Imprecision}
+\label{sec:org1418fba}
 The standard deviation of the GALT activity assay at the confirmation
 threshold (1.5 U/g Hg) was estimated based on six months of quality
 control (QC) data for a QC material with mean GALT activity of 1.6 U/g
 Hg (n = 1812)
-\end{frame}
 
-\begin{frame}[label={sec:org751fca3}]{Simulation}
+\subsection*{Simulation}
+\label{sec:org03bd4fd}
 The population distribution of GALT activity results and the
 imprecision at the confirmatory threshold were used to estimate the
 number of potentially false negative samples due to measurement
@@ -209,9 +209,9 @@ I = C + k\sigma
 \begin{equation}\label{eq:imprecision}
 \text{imprecision zone samples}  =  n \cdot \sum_{x=initial}^{7\sigma} Ye_x \cdot Yp_x \cdot dx
 \end{equation}
-\end{frame}
 
-\begin{frame}[label={sec:org1e29134}]{Software}
+\subsection*{Software}
+\label{sec:org4e1194b}
 The manuscript was prepared using the Org-mode environment for
 literate programming and reproducible research
 (\citeprocitem{3}{3}). The R language for statistical computing was used
@@ -221,22 +221,21 @@ times and xtable for exporting tables to
 \LaTeX  (\citeprocitem{4}{4}–\citeprocitem{8}{8}). R scripts
 used for data analysis are available here:
 \url{https://github.com/hendersonmpa/imprecision\_logic\_manuscript.git}
-\end{frame}
 
 \section*{Results}
-\label{sec:orge8126f5}
+\label{sec:orgb345eff}
 
 Two considerations when determining the threshold value used in the
 initial phase of a two step screening algorithm (Supplementary Figure
-\ref{fig:org82877b6}) are the number of samples that will require repeat
+\ref{fig:org0182d84}) are the number of samples that will require repeat
 testing and the potential for a false negative result during the first
 phase of testing.  The "grey zone" is the region between the initial
 and confirmation thresholds and all samples with GALT activity in this
 range are repeated in duplicate in the second phase of screening
-(Figure \ref{fig:org65e4d0c}). The "imprecision zone" is the region outside
+(Figure \ref{fig:org228f36f}). The "imprecision zone" is the region outside
 the "grey zone" but within the distribution of analytical imprecision
 at the confirmation threshold (7\(\sigma\) above the confirmation
-threshold) (Figure \ref{fig:org65e4d0c}, gold area). 
+threshold) (Figure \ref{fig:org228f36f}, gold area). 
 
 A simulation was run to determine the number of samples that would
 fall in the "grey zone" and those potentially affected by analytical
@@ -249,9 +248,9 @@ shows the estimated number of samples in the "grey-zone" and
 "imprecision zone" annually for a set of initial thresholds. For
 example, an initial threshold 1 standard deviation from the
 confirmation threshold (GALT activity = 1.70 U/g Hb) would result in
-\(\sim\) 10 samples in the grey zone (Figure \ref{fig:org65e4d0c} grey area)
+\(\sim\) 10 samples in the grey zone (Figure \ref{fig:org228f36f} grey area)
 annually with \(\sim\) 15 samples in the "imprecision zone" (Figure
-\ref{fig:org65e4d0c}, joint probablity based on red and gold areas). In
+\ref{fig:org228f36f}, joint probablity based on red and gold areas). In
 contrast an initial threshold 6 standard deviations from the
 confirmation threshold (GALT activity = 2.70 U/g Hb) from would result
 in \(\sim\) 222 samples in the grey zone annually with essentially zero
@@ -261,7 +260,7 @@ low in our program, we therefore adopted an initial threshold 6
 standard deviations from the confirmation threshold.
 
 \section*{Discussion}
-\label{sec:orga061c75}
+\label{sec:org5a72e13}
 
 We have used a newborn screening algorithm for classic galactosemia to
 demonstrate how analytical imprecision and biomarker distribution in a
@@ -294,10 +293,10 @@ however this approach could be extended to incorporate total
 uncertainty of measurement (\citeprocitem{12}{12}).
 
 \section*{Acknowledgments}
-\label{sec:orgd38d5ed}
+\label{sec:org791d38a}
 Funding: None.
 \section*{Author Declarations}
-\label{sec:org40f1a06}
+\label{sec:org4e8c772}
 \begin{description}
 \item[{Author Contributions}] All authors confirmed they have contributed
 to the intellectual content of this paper and have met the following
@@ -315,7 +314,7 @@ resolved.
 \item[{Authors’ Disclosures or Potential Conflicts of Interest}] No authors declared any potential conflicts of interest.
 \end{description}
 \section*{References}
-\label{sec:org18e7cce}
+\label{sec:orgfc6476a}
 \hypertarget{citeproc_bib_item_1}{1.  S. Schweitzer, \href{https://doi.org/10.1007/BF02143801}{Newborn mass screening for galactosemia}. \textit{European journal of pediatrics} \textbf{154}, 0–1 (1995).}
 
 \hypertarget{citeproc_bib_item_2}{2.  E. Beutler, \href{https://doi.org/10.1016/0009-9120(91)80003-L}{Galactosemia: screening and diagnosis}. \textit{Clinical biochemistry} \textbf{24}, 293–300 (1991).}
@@ -342,24 +341,24 @@ resolved.
 \clearpage 
 
 \section*{Tables}
-\label{sec:orgb667984}
+\label{sec:org665b128}
 
 [1m[22m`summarise()` has grouped output by 'factor'. You can override using the `.groups` argument.
 % latex table generated in R 4.1.2 by xtable 1.8-4 package
-% Tue Sep 20 17:39:27 2022
+% Thu Sep 22 12:05:26 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrr}
   \hline
 factor & initial & grey\_p025 & grey\_median & grey\_p975 & imp\_p025 & imp\_median & imp\_p975 \\ 
   \hline
-  0 & 1.50 & 0.00 & 0.00 & 0.00 & 1.6e+02 & 1.9e+02 & 2.2e+02 \\ 
-    1 & 1.70 & 7.25 & 10.15 & 14.00 &  64 &  76 &  89 \\ 
-    2 & 1.90 & 18.85 & 26.10 & 33.35 & 9.7 &  13 &  17 \\ 
-    3 & 2.10 & 39.15 & 50.75 & 62.35 & 0.57 & 0.84 & 1.1 \\ 
-    4 & 2.30 & 73.95 & 89.90 & 107.30 & 0.014 & 0.02 & 0.034 \\ 
-    5 & 2.50 & 125.20 & 146.45 & 169.65 & 0.00014 & 0.00022 & 0.00035 \\ 
-    6 & 2.70 & 195.75 & 220.40 & 249.40 &   0 &   0 &   0 \\ 
+  0 & 1.50 & 0.00 & 0.00 & 0.00 & 1.6e+02 & 1.9e+02 & 2.3e+02 \\ 
+    1 & 1.70 & 5.80 & 10.15 & 13.05 &  65 &  77 &  89 \\ 
+    2 & 1.90 & 18.85 & 26.10 & 33.35 & 9.8 &  13 &  17 \\ 
+    3 & 2.10 & 39.15 & 50.75 & 62.35 & 0.59 & 0.84 & 1.1 \\ 
+    4 & 2.30 & 73.95 & 89.90 & 105.85 & 0.014 & 0.02 & 0.034 \\ 
+    5 & 2.50 & 126.15 & 147.90 & 169.65 & 0.00014 & 0.00022 & 0.00037 \\ 
+    6 & 2.70 & 194.30 & 221.85 & 249.40 &   0 &   0 &   0 \\ 
    \hline
 \end{tabular}
 \caption{Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations} 
@@ -369,28 +368,32 @@ factor & initial & grey\_p025 & grey\_median & grey\_p975 & imp\_p025 & imp\_med
 \clearpage
 
 \section*{Figures}
-\label{sec:org53364d6}
+\label{sec:orgebb6f14}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{./figures/galtthresholds.pdf}
-\caption{\label{fig:org65e4d0c}The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.}
+\caption{\label{fig:org228f36f}The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.}
 \end{figure}
 
 \clearpage
 
-\begin{center}
-\includegraphics[width=.9\linewidth]{./figures/galtthresholdsv2.pdf}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{./figures/galtthresholdsv2.pdf}
+\caption{\label{fig:org21a3f0a}The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.}
+\end{figure}
+
+\clearpage
 
 \section*{Supplementary Data}
-\label{sec:org71e2b0a}
+\label{sec:org295ce81}
 
 \beginsupplement
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{./figures/algorithm.pdf}
-\caption{\label{fig:org82877b6}Simplified Screening Algorithm for a Disorder such as Classic Galactosemia in which Biomarker Measurements are Low.}
+\caption{\label{fig:org0182d84}Simplified Screening Algorithm for a Disorder such as Classic Galactosemia in which Biomarker Measurements are Low.}
 \end{figure}
 \end{document}

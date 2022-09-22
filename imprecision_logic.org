@@ -301,88 +301,83 @@ Funding: None.
 * Tables 
 
 #+begin_src R :session *R* :results values :exports none :tangle yes
-       library("tidyverse")
-       library("lubridate")
-     #  library("readxl")
-       library("RODBC")
-       library("xtable")
+  library("tidyverse")
+  library("lubridate")
+  ## library("readxl")
+  library("RODBC")
+  library("xtable")
   library("pander")
   library("scales")
-       options(warn=-1) ## options(warn=0) to turn back on
-       ## Suppress summarise info
-       today <- as.Date(now())
-       source("credentials.r")
+  options(warn=-1) ## options(warn=0) to turn back on
+  ## Suppress summarise info
+  today <- as.Date(now())
+  source("credentials.r")
 
-       ## rescale a vector from 0 to 1
-       rescale <- function(x){
-	 (x-min(x))/(max(x)-min(x))
-       }
+  ## rescale a vector from 0 to 1
+  rescale <- function(x){
+    (x-min(x))/(max(x)-min(x))
+  }
 
-       '%!in%' <- function(x,y)!('%in%'(x,y))
+  '%!in%' <- function(x,y)!('%in%'(x,y))
 
-       ### accept data, initial and confirm thresholds
-       ### return the area of the probability density polygon 
-       densprob <- function(dens, lower, upper) {
-	 x <- dens$x
-	 y <- dens$y
-	 dx <- x[2] - x[1] ## determine the increment
-	 C <- sum(y) * dx ## total area should be very close to 1
-	 p.unscaled <- sum(y[x >= lower & x <= upper]) * dx 
-	 round(p.unscaled/C, digits = 5) ## scaled probablity
-       }
+  ### accept data, initial and confirm thresholds
+  ### return the area of the probability density polygon 
+  densprob <- function(dens, lower, upper) {
+    x <- dens$x
+    y <- dens$y
+    dx <- x[2] - x[1] ## determine the increment
+    C <- sum(y) * dx ## total area should be very close to 1
+    p.unscaled <- sum(y[x >= lower & x <= upper]) * dx 
+    round(p.unscaled/C, digits = 5) ## scaled probablity
+  }
 
 
-     ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each y from the initial threshold to 6 SD
-     jointprob  <- function(dens, confirm, sd, lower, upper) {
-       #dens <- density(pop_data)
-       x <- dens$x
-       y <- dens$y
-       dx <- x[2] - x[1] ## determine the increment
-       pop_dens_region <- y[x >= lower & x <= upper] ##trim the pop dens to the region of interest
+  ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each y from the initial threshold to 6 SD
+  jointprob  <- function(dens, confirm, sd, lower, upper) {
+					  #dens <- density(pop_data)
+    x <- dens$x
+    y <- dens$y
+    dx <- x[2] - x[1] ## determine the increment
+    pop_dens_region <- y[x >= lower & x <= upper] ##trim the pop dens to the region of interest
 
-       ## create the imprecision region
-       start <- confirm - (6*sd)
-       stop <- confirm + (6*sd)
-       x2 <- seq(start,stop,dx)
-       y2 <- dnorm(x2,confirm,sd)
-       imp_dens_region <- y2[x2 >= lower & x2 <= upper] ##trim the imprecision dens to the region of interest
-       #Create a dataframe with the Ys from both densities side by side
-       sum(pop_dens_region * imp_dens_region) * dx
-       }
+    ## create the imprecision region
+    start <- confirm - (6*sd)
+    stop <- confirm + (6*sd)
+    x2 <- seq(start,stop,dx)
+    y2 <- dnorm(x2,confirm,sd)
+    imp_dens_region <- y2[x2 >= lower & x2 <= upper] ##trim the imprecision dens to the region of interest
+					  #Create a dataframe with the Ys from both densities side by side
+    sum(pop_dens_region * imp_dens_region) * dx
+  }
 
-    ## Testing
+  ## Testing
   ## jointprob(galtfilter$result, 1.5, 2.7, 3.2)
   ## jointprob(galtfilter$result, 1.5, 1.5, 3.2)
 
-    ## accept data, confirmation threshold, sd at the threshold, factor expansion factor
-       ## return factor, lower, upper, grey area samples, uncertain area samples
+  ## accept a density object, confirmation threshold, sd at the threshold, factor expansion factor
+  ## return factor, lower, upper, grey area samples, uncertain area samples
+  denssamples <- function(dens, confirm, sd, factor , direction = "left", samples = 145000) {
+    umsd  <- factor * sd
+    sevensd  <- 7 * sd
+    if (direction == "left") {
+      ## initial threshold based on the sd and factor
+      initial <- confirm + umsd
+      end <- confirm + sevensd
+      ## grey area between the confirm and initial thresholds
+      grey_area <- densprob(dens, confirm, initial)
+      ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each value from the initial threshold to 6 SD
+      imprecision_area <- jointprob(dens, confirm, sd, initial, end)
 
-    denssamples <- function(dens, confirm, sd, factor , direction = "left", samples = 145000) {
-	 #dens <- density(data)
-	 umsd  <- factor * sd
-	 sevensd  <- 7 * sd
-	 if (direction == "left") {
-	   ## initial threshold based on the sd and factor
-	   initial <- confirm + umsd
-	   end <- confirm + sevensd
-	   ## grey area between the confirm and initial thresholds
-	   grey_area <- densprob(dens, confirm, initial)
-	   ## Calculate the joint probability of the sample distribution and the imprecsion distribution for each value from the initial threshold to 6 SD
-	   imprecision_area <- jointprob(dens, confirm, sd, initial, end)
-
-	 } else {
-	   ## right sided threshold
-	   print("Right sided thresholds not implemented")
-	 }
-	 ## area of the probability density polygon between the initial and 6 sd above
-	 grey_samples <- grey_area * samples
-	 imprecision_samples <- imprecision_area * samples
-	 list(factor, initial, grey_samples, imprecision_samples)
-     }
-
-    ## Testing
-    ##  denssamples(galtfilter$result, 1.5, 0.2, 1, direction = "left")
-
+    } else {
+      ## right sided threshold
+      print("Right sided thresholds not implemented")
+    }
+    ## area of the probability density polygon between the initial and 6 sd above
+    grey_samples <- grey_area * samples
+    imprecision_samples <- imprecision_area * samples
+    list(factor, initial, grey_samples, imprecision_samples)
+  }
+  
     #+end_src
 
     #+RESULTS:
@@ -416,8 +411,7 @@ Funding: None.
   galtdata <- na.omit(galtdata)
   galtfilter <-  galtdata %>%
     filter( !result_code %in% c("GALT-C-01-100", "GALT-C-01-001", "GALT-C-01-012")) ## initial results only
-    #filter(measured_time >= ymd_hms("2018-06-11 00:00:00") & !result_code %in% c("GALT-C-01-100", "GALT-C-01-001", "GALT-C-01-012")) ## initial result only
-#+end_src
+  #+end_src
 
 #+RESULTS:
 
@@ -458,16 +452,9 @@ Funding: None.
 	      imp_p025 = quantile(imprecision,probs = c(0.025), type = 8, na.rm = TRUE),
 	      imp_median = median(imprecision, na.rm = TRUE),
 	      imp_p975 = quantile(imprecision,probs = c(0.975), type = 8, na.rm = TRUE)) %>%
-    ## rename("Standard Deviations" = factor,
-    ##       	    "Initial Threshold" = initial,
-    ##       	    "Grey Zone" = grey,
-    ##       	    "Imprecision Zone" =  imprecision) %>%
     xtable(caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations",
 	   label = "tab:imprecision", display = c("d", "d", "f","f", "f", "f", "g", "g","g")) %>%
     print(include.rownames = FALSE)
-
-  ##pandoc.table(style = "rmarkdown", caption = "Initial Threshold Simulation Results. In each simulation the confirmation threshold is set to 1.5 U/g Hb and the initial thresholds is increased by the corresponding number of standard deviations")
-
 
 #+end_src
 
@@ -492,60 +479,53 @@ Error: unexpected '}' in "}"
 * Figures 
 
 #+begin_src R :session *R* :results output graphics file :file ./figures/galtthresholds.pdf :exports results :tangle yes
-    dens <- density(galtfilter$result)
-    sd <- 0.2 ##SD at postive confirm
-    confirm  <- 1.5
-    initial <- confirm + (1.1*sd)
-    theight  <- max(dens$y[which(dens$x <= confirm)])
-    bheight  <- max(dens$y[which(dens$x <= initial)])
-    ## defining the region of FN uncertainty
-    start  <- confirm - (6*sd)
-    stop <- confirm + (6*sd)
-    x2 <- seq(start,stop,0.01)
-    y2 <- theight*rescale(dnorm(x2,confirm,sd))
-    ## create indices for half of the UM distribution
-    halfx2 <- seq(confirm,stop,0.01)
-    halfy2 <- y2[length(halfx2):length(x2)]
-    fnx2 <- seq(initial,stop,0.01)
-    fny2 <- y2[(length(x2) - length(fnx2)):(length(x2) -1)]
+  dens <- density(galtfilter$result)
+  sd <- 0.2 ##SD at postive confirm
+  confirm  <- 1.5
+  initial <- confirm + (1.1*sd)
+  theight  <- max(dens$y[which(dens$x <= confirm)])
+  bheight  <- max(dens$y[which(dens$x <= initial)])
+  ## defining the region of FN uncertainty
+  start  <- confirm - (6*sd)
+  stop <- confirm + (6*sd)
+  x2 <- seq(start,stop,0.01)
+  y2 <- theight*rescale(dnorm(x2,confirm,sd))
+  ## create indices for half of the UM distribution
+  halfx2 <- seq(confirm,stop,0.01)
+  halfy2 <- y2[length(halfx2):length(x2)]
+  fnx2 <- seq(initial,stop,0.01)
+  fny2 <- y2[(length(x2) - length(fnx2)):(length(x2) -1)]
 
   plot(x= 0:2*confirm, y = 0:2*bheight, type = "n",
-	 xlab = "GALT Activity U/g Hb",
-	 ylab = "Probability Density")
+       xlab = "GALT Activity U/g Hb",
+       ylab = "Probability Density")
   ### polygons
   polygon(dens,col = "steelblue", border = "steelblue")
   ## imprecision zome
-  # purple50 <- adjustcolor("purple", alpha.f = 0.25)
   with(dens, polygon(x=c(stop, stop, x[x < stop]), y=c(0, y[x=stop], y[x < stop]), col="goldenrod", border = "goldenrod"))
   ## grey zone
   with(dens, polygon(x=c(initial, initial, x[x < initial]), y=c(0, y[x=initial], y[x < initial]), col="grey75", border = "grey75"))
   ## positive
-    with(dens, polygon(x=c(confirm, confirm, x[x < confirm]), y=c(0, y[x=confirm], y[x < confirm]), col="black", border = "black"))
+  with(dens, polygon(x=c(confirm, confirm, x[x < confirm]), y=c(0, y[x=confirm], y[x < confirm]), col="black", border = "black"))
 
-    ## measurement error distribution
-    points(x2,y2,type="l",col="red", lwd = 4) ## region of uncertainty of measurment
-    zeros <- rep(0,length(x2)) # create a vector of zeros
-    #polygon(c(x2,rev(x2)),c(y2,zeros), border = NA, col="red")
+  ## measurement error distribution
+  points(x2,y2,type="l",col="red", lwd = 4) ## region of uncertainty of measurment
+  zeros <- rep(0,length(x2)) # create a vector of zeros
+  fnzeros <- rep(0,length(fnx2)) # create a vector of zeros
+  polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col="red")
 
-    #polygon(c(halfx2,rev(halfx2)),c(halfy2,zeros), border = NA, col="red")
-    fnzeros <- rep(0,length(fnx2)) # create a vector of zeros
-    polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col="red")
-    #area <- 0.01 * sum(halfy2)
-    #samples <- round(area *145000, digits = 0)
-    #text(x = 0.55, y = 0.004, label= paste("Annual results in red area:",samples), side = 3)
+  abline(v = confirm, col = "black" , lty = 1, lwd = 2)
+  abline(v = initial, col = "black", lty = 2, lwd = 2)
 
-    abline(v = confirm, col = "black" , lty = 1, lwd = 2)
-    abline(v = initial, col = "black", lty = 2, lwd = 2)
-    #abline(v = confirm + (1*sd), col = "black", lty = 2, lwd = 2) 
+  legend("topleft",
+	 legend = c("positive", "grey zone", "imprecision zone", "negative", 
+		    "analytical imprecision","confirmation threshold",
+		    "initial threshold"),
+	 col = c("black", "grey75", "goldenrod", "steelblue" , "red", "black", "black"),
+	 lty = c(NA, NA, NA, NA, "solid", "solid", "dashed"),
+	 lwd = c(NA, NA, NA, NA, 2, 2, 2),
+	 pch = c(15, 15, 15, 15, NA , NA, NA))
 
-    legend("topleft",
-	   legend = c("positive", "grey zone", "imprecision zone", "negative", 
-		       "analytical imprecision","confirmation threshold",
-		      "initial threshold"),
-	   col = c("black", "grey75", "goldenrod", "steelblue" , "red", "black", "black"),
-	   lty = c(NA, NA, NA, NA, "solid", "solid", "dashed"),
-	   lwd = c(NA, NA, NA, NA, 2, 2, 2),
-	   pch = c(15, 15, 15, 15, NA , NA, NA))
 #+end_src
 
 #+CAPTION[]: The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.
@@ -567,7 +547,6 @@ Error: unexpected '}' in "}"
   start <- confirm - (6*sd)
   stop <- confirm + (6*sd)
   x2 <- seq(start,stop,0.01)
-					  #y2 <- theight*rescale(dnorm(x2,confirm,sd))
   y2 <- dnorm(x2,confirm,sd)
 
   ## create indices for half of the UM distribution
@@ -579,7 +558,6 @@ Error: unexpected '}' in "}"
   plot(dens,type = "n", main = "",
        xlim = c(0,5),
        ylim = c(0,0.04),
-					  #x= 0:10*confirm, y = 0:10*bheight, 
        xlab = "GALT Activity U/g Hb",
        ylab = "Probability Density")
   red50 <- alpha("red", 0.5)
@@ -588,22 +566,16 @@ Error: unexpected '}' in "}"
   polygon(x2,y2,type="l",col=red50, border = "red")
   polygon(dens,col = "steelblue", border = "steelblue")
   ## imprecision zome
-					  # purple50 <- adjustcolor("purple", alpha.f = 0.25)
   with(dens, polygon(x=c(stop, stop, x[x < stop]), y=c(0, y[x=stop], y[x < stop]), col="goldenrod", border = "goldenrod"))
   ## grey zone
   with(dens, polygon(x=c(initial, initial, x[x < initial]), y=c(0, y[x=initial], y[x < initial]), col="grey75", border = "grey75"))
   ## positive
   with(dens, polygon(x=c(confirm, confirm, x[x < confirm]), y=c(0, y[x=confirm], y[x < confirm]), col="black", border = "black"))
   points(x2,y2,type="l",col="red", lwd = 2) ## region of uncertainty of measurment
-
-
-
-  ##polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col= alpha("red", 0.5))
-  #fnzeros <- rep(0,length(fnx2)) # create a vector of zeros
-  #polygon(c(fnx2,rev(fnx2)),c(fny2,fnzeros), border = NA, col= alpha("red", 0.5))
-					  # thresholds
+  ## thresholds
   abline(v = confirm, col = "black" , lty = 1, lwd = 2)
   abline(v = initial, col = "black", lty = 2, lwd = 2)
+
   legend("topright", inset = 0.02,
 	 legend = c("positive", "grey zone", "imprecision zone", "negative", 
 		    "analytical imprecision","confirmation threshold",
@@ -616,8 +588,13 @@ Error: unexpected '}' in "}"
 	 box.lty = 0)
 #+end_src
 
+#+CAPTION[]: The Low End of the GALT Activity Population Distribution. Results above the initial threshold (dashed black line) are screen negative (blue region), however samples in the "imprecision zone" (gold region) are potentially affected by analytical imprecision (red area) at the confirmation threshold (solid black line). Samples below the initial threshold (grey and black regions) are reflexed for future testing.
+#+NAME: fig:imprecision
+#+ATTR_LaTeX: :width 0.9\textwidth
 #+RESULTS:
 [[file:./figures/galtthresholdsv2.pdf]]
+
+\clearpage
 
 * Supplementary Data
 
